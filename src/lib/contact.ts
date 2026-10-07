@@ -1,15 +1,10 @@
 import { profile } from "@/content/profile";
 
-// EmailJS keys are public by design: they ship to the browser. Set them in
-// .env.local for development and in the host's environment variables for
-// production (see README › Contact form). Next inlines each literal
-// `process.env.NEXT_PUBLIC_…` reference at build time.
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
-/** Without EmailJS keys the form falls back to opening the visitor's email app. */
-export const emailjsConfigured = Boolean(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY);
+/**
+ * EmailJS keys, read on the server by `getEmailJSConfig` (emailjsConfig.ts) and
+ * passed to the contact form. They are public by design: they reach the browser.
+ */
+export type EmailJSConfig = { serviceId: string; templateId: string; publicKey: string };
 
 export type ContactMessage = { name: string; email: string; message: string };
 
@@ -41,13 +36,12 @@ export function mailtoHref(m: ContactMessage) {
  * Rejects with EmailJS's `{ status, text }`; 429 means a send from this browser
  * happened less than 10 s ago.
  */
-export async function sendContactMessage(m: ContactMessage) {
-  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) throw new Error("EmailJS is not configured");
+export async function sendContactMessage(config: EmailJSConfig, m: ContactMessage) {
   const emailjs = await import("@emailjs/browser");
   return emailjs.send(
-    SERVICE_ID,
-    TEMPLATE_ID,
+    config.serviceId,
+    config.templateId,
     { title: subjectFor(m), name: m.name, email: m.email, message: m.message, time: sentAt() },
-    { publicKey: PUBLIC_KEY, blockHeadless: true, limitRate: { id: "contact", throttle: 10_000 } },
+    { publicKey: config.publicKey, blockHeadless: true, limitRate: { id: "contact", throttle: 10_000 } },
   );
 }

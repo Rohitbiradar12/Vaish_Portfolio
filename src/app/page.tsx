@@ -11,6 +11,7 @@ import { Projects } from "@/components/sections/Projects";
 import { Publications } from "@/components/sections/Publications";
 import { Resume } from "@/components/sections/Resume";
 import { Skills } from "@/components/sections/Skills";
+import { getEmailJSConfig } from "@/lib/emailjsConfig";
 
 export default function Page() {
   return (
@@ -30,7 +31,7 @@ export default function Page() {
             <Education />
             <Publications />
             <Resume />
-            <Contact />
+            <Contact emailjs={getEmailJSConfig()} />
           </div>
         </div>
       </main>

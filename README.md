@@ -58,8 +58,8 @@ The form sends messages through [EmailJS](https://www.emailjs.com) straight from
 
    Each message then uses 2 of the 200 monthly emails. Anyone can trigger the auto-reply to any address they type, so keep its text generic: don't add `{{message}}`.
 5. **Account → General:** copy the **Public Key**. The private key is not used: keep it out of the code and env files.
-6. Copy `.env.example` to `.env.local` and fill in the three values. Restart `npm run dev`.
-7. In production, add the same three variables to the host's environment settings and redeploy. They are baked in at build time.
+6. Copy `.env.example` to `.env.local` and fill in `EMAILJS_SERVICE_ID`, `EMAILJS_TEMPLATE_ID` and `EMAILJS_PUBLIC_KEY`. Restart `npm run dev`.
+7. In production, add the same three variables to the host's environment settings and redeploy. The page reads them on the server at build time (`src/lib/emailjsConfig.ts`) and passes them to the form.
 
 The keys are public by design (they ship to the browser). The form blocks headless browsers and allows one message per browser every 10 seconds. If spam becomes a problem, EmailJS supports reCAPTCHA v2. Don't just tick it in the template settings: the form would also need to send the CAPTCHA token, or every message fails.
 

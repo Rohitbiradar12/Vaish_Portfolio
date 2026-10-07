@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { profile } from "@/content/profile";
-import { emailjsConfigured, mailtoHref, sendContactMessage } from "@/lib/contact";
+import { type EmailJSConfig, mailtoHref, sendContactMessage } from "@/lib/contact";
 
 const PROMPT = "vaishnavi@vp-silicon:~$";
 
@@ -22,7 +22,8 @@ function Line({ cmd, out }: { cmd: string; out?: string }) {
   );
 }
 
-export function Contact() {
+/** `emailjs` is null when the keys aren't set; the form then opens the visitor's email app. */
+export function Contact({ emailjs }: { emailjs: EmailJSConfig | null }) {
   const [name, setName] = useState("");
   const [from, setFrom] = useState("");
   const [msg, setMsg] = useState("");
@@ -32,17 +33,17 @@ export function Contact() {
 
   const draft = { name, email: from, message: msg };
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status === "sending") return;
-    if (!emailjsConfigured) {
+    if (!emailjs) {
       window.location.assign(mailtoHref(draft));
       setStatus("opened");
       return;
     }
     setStatus("sending");
     try {
-      await sendContactMessage(draft);
+      await sendContactMessage(emailjs, draft);
       setSentTo(from);
       setName("");
       setFrom("");
