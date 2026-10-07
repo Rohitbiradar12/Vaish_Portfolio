@@ -4,8 +4,12 @@ import { useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { profile } from "@/content/profile";
+import { emailjsConfigured, mailtoHref, sendContactMessage } from "@/lib/contact";
 
 const PROMPT = "vaishnavi@vp-silicon:~$";
+
+// "opened" = handed to the visitor's email app (used when EmailJS isn't configured).
+type Status = "idle" | "sending" | "sent" | "opened" | "throttled" | "failed";
 
 function Line({ cmd, out }: { cmd: string; out?: string }) {
   return (
@@ -22,15 +26,32 @@ export function Contact() {
   const [name, setName] = useState("");
   const [from, setFrom] = useState("");
   const [msg, setMsg] = useState("");
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [sentTo, setSentTo] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const draft = { name, email: from, message: msg };
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Portfolio: message from ${name || "a visitor"}`;
-    const body = `${msg}\n\n— ${name}${from ? ` (${from})` : ""}`;
-    window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    if (status === "sending") return;
+    if (!emailjsConfigured) {
+      window.location.assign(mailtoHref(draft));
+      setStatus("opened");
+      return;
+    }
+    setStatus("sending");
+    try {
+      await sendContactMessage(draft);
+      setSentTo(from);
+      setName("");
+      setFrom("");
+      setMsg("");
+      setStatus("sent");
+    } catch (err) {
+      console.error("Contact form: message not sent", err);
+      setStatus((err as { status?: number } | null)?.status === 429 ? "throttled" : "failed");
+    }
   };
 
   const copyEmail = async () => {
@@ -77,21 +98,39 @@ export function Contact() {
                 </label>
                 <label className="grid gap-1.5 sm:grid-cols-[88px_1fr] sm:items-center">
                   <span className="text-signal">--email</span>
-                  <input className={field} type="email" value={from} onChange={(e) => setFrom(e.target.value)} placeholder="you@company.com" autoComplete="email" />
+                  <input className={field} type="email" value={from} onChange={(e) => setFrom(e.target.value)} placeholder="you@company.com" required autoComplete="email" />
                 </label>
                 <label className="grid gap-1.5 sm:grid-cols-[88px_1fr]">
                   <span className="pt-2 text-signal">--msg</span>
                   <textarea className={`${field} min-h-28 resize-y`} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="We're hiring for…" required />
                 </label>
-                <div className="flex flex-wrap items-center gap-4 pt-2 sm:pl-[100px]">
+                <div className="pt-2 sm:pl-[100px]">
                   <button
                     type="submit"
-                    className="rounded-md bg-signal px-5 py-2 font-semibold text-ink shadow-[0_0_26px_-6px_rgba(0,229,255,0.7)] transition hover:brightness-110"
+                    disabled={status === "sending"}
+                    className="rounded-md bg-signal px-5 py-2 font-semibold text-ink shadow-[0_0_26px_-6px_rgba(0,229,255,0.7)] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
                   >
-                    SEND ↵
+                    {status === "sending" ? "SENDING…" : "SEND ↵"}
                   </button>
-                  {sent && <span className="text-ok">✓ handed off to your mail client</span>}
                 </div>
+                <p role="status" className="sm:pl-[100px]">
+                  {status === "sent" && (
+                    <span className="text-ok">
+                      ✓ Message sent. {profile.firstName} will reply to {sentTo}.
+                    </span>
+                  )}
+                  {status === "opened" && <span className="text-muted">Opening your email app… Nothing opened? Copy the address from the Email card.</span>}
+                  {status === "throttled" && <span className="text-warn">✗ Please wait a few seconds before trying again.</span>}
+                  {status === "failed" && (
+                    <span className="text-warn">
+                      ✗ The message couldn&apos;t be sent.{" "}
+                      <a href={mailtoHref(draft)} className="text-fg underline decoration-line-strong underline-offset-4 hover:decoration-signal">
+                        Send it from your email app
+                      </a>{" "}
+                      instead, or copy the address from the Email card.
+                    </span>
+                  )}
+                </p>
               </form>
               <p className="text-dim">
                 <span className="text-ok">{PROMPT}</span> <span className="animate-blink">▍</span>
@@ -118,7 +157,7 @@ export function Contact() {
           )}
           <a href="#resume" className="panel p-5 transition hover:border-line-strong">
             <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Resume</p>
-            <p className="mt-1.5 text-fg">Download the datasheet →</p>
+            <p className="mt-1.5 text-fg">Download the resume →</p>
           </a>
           <div className="panel p-5">
             <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Location</p>
