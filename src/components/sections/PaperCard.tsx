@@ -272,7 +272,7 @@ function Icon({ name }: { name: FlowIcon }) {
 
 function SignalFlow({ flow }: { flow: FlowStep[] }) {
   return (
-    <ol className="mt-5 flex flex-col md:flex-row md:items-stretch">
+    <ol className="mt-5 flex flex-col lg:flex-row lg:items-stretch">
       {flow.map((step, i) => (
         <Fragment key={step.id}>
           <li className="flow-node">

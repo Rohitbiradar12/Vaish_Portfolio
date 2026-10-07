@@ -24,12 +24,15 @@ export function Nav() {
         )}
       >
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8" aria-label="Main">
-          <a href="#top" className="flex items-center gap-3" aria-label={`${profile.name}, back to top`}>
+          <a href="#top" className="flex items-center gap-3">
             <span className="relative grid h-8 w-8 place-items-center rounded-md border border-line-strong bg-panel font-mono text-[0.62rem] font-bold text-fg">
               {profile.initials}
               <span className="absolute bottom-1 left-1 h-1 w-1 rounded-full bg-signal" />
             </span>
             <span className="hidden font-display text-[0.95rem] font-semibold tracking-tight text-fg sm:block">{profile.name}</span>
+            <span className="sr-only">
+              <span className="sm:hidden">{profile.name}</span>, back to top
+            </span>
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -82,7 +85,6 @@ export function Nav() {
                   <a href={`#${l.id}`} onClick={() => setOpen(false)} className="flex items-baseline gap-4 border-b border-line py-4">
                     <span className="font-mono text-[0.7rem] text-signal">{l.code}</span>
                     <span className="font-display text-2xl text-fg">{l.label}</span>
-                    <span className="ml-auto font-mono text-[0.62rem] uppercase tracking-[0.14em] text-dim">{l.level}</span>
                   </a>
                 </motion.li>
               ))}

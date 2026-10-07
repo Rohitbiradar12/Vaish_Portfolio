@@ -7,7 +7,7 @@ export const heroState = {
   progress: 0,
   /** damped progress, updated once per frame by the scene */
   smooth: 0,
-  /** performance.now() when the power-on intro starts; -1 until the loader finishes */
+  /** performance.now() when the power-on intro starts; -1 until the scene is ready */
   introStart: -1,
   /** pointer in normalised device coords (-1..1) */
   pointerX: 0,
@@ -38,11 +38,8 @@ function createFlag() {
   };
 }
 
-/** Flips once the WebGL scene has rendered its first frames (or failed). */
+/** Flips once the WebGL scene has rendered its first frames (or WebGL is unavailable). */
 export const sceneReady = createFlag();
-
-/** Flips once the boot loader has finished. */
-export const bootDone = createFlag();
 
 export const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 export const smoothstep = (a: number, b: number, x: number) => {

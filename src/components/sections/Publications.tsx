@@ -40,7 +40,7 @@ export function Publications() {
         </div>
       )}
 
-      <div className="grid gap-6">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6">
         {others.map((p) => (
           <Reveal key={p.id}>
             <PaperCard p={p} index={publications.indexOf(p) + 1} />

@@ -64,7 +64,7 @@ export function About() {
             One engineer, <span className="text-signal">every layer</span> of the chip.
           </>
         }
-        lead="Device physics, full-custom layout, RTL and RTL-to-GDSII physical design: the whole stack, written up like a part datasheet."
+        lead="Device physics, full-custom layout, RTL design and RTL-to-GDSII physical design."
       />
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:items-stretch lg:gap-12">
@@ -78,14 +78,14 @@ export function About() {
           <article className="panel flex h-full flex-col overflow-hidden">
             <header className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-6 py-5 md:px-8">
               <div>
-                <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-signal">VP-2026 · {profile.role}</p>
+                <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-signal">{profile.role}</p>
                 <p className="mt-1 font-display text-xl font-semibold text-fg">{profile.name}</p>
               </div>
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-dim">Datasheet · Rev A</p>
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-dim">{profile.degree}</p>
             </header>
 
             <section className="flex flex-1 flex-col justify-center px-6 py-7 md:px-8 md:py-9">
-              <h3 className="ds-heading">General description</h3>
+              <h3 className="ds-heading">Summary</h3>
               <div className="mt-5 space-y-4 text-[1.02rem] leading-relaxed text-fg/85">
                 {bio.map((p) => (
                   <p key={p.slice(0, 24)}>{p}</p>
@@ -95,7 +95,7 @@ export function About() {
 
             <footer className="flex flex-wrap justify-between gap-2 border-t border-line px-6 py-3.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-dim md:px-8">
               <span>{profile.location}</span>
-              <span>Page 1 of 1</span>
+              <span>{profile.school}</span>
             </footer>
           </article>
         </Reveal>

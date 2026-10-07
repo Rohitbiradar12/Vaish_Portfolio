@@ -69,7 +69,7 @@ export function Experience() {
             Career, captured as a <span className="text-signal">waveform</span>.
           </>
         }
-        lead="Each role is a signal: high while it was active. Hover to move the cursor, click a trace to probe it. The colours match the blocks on the die above."
+        lead="Each role is a signal, high while it was active. Hover to scrub the timeline and select a role to see the details. Colours match the blocks on the chip above."
       />
 
       <Reveal>
@@ -82,7 +82,6 @@ export function Experience() {
               <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/80" />
               <span className="ml-3 normal-case tracking-normal text-muted">career.vcd</span>
             </div>
-            <span className="font-mono text-[0.62rem] normal-case tracking-normal text-dim sm:hidden">swipe →</span>
             <span className="hidden sm:inline">
               timescale 1 month · cursor{" "}
               <span className="text-fg">{cursorIdx === null ? "—" : fmtIndex(cursorIdx)}</span>
@@ -90,10 +89,10 @@ export function Experience() {
           </div>
 
           <div className="overflow-x-auto" data-lenis-prevent-wheel>
-            <div className="grid min-w-[660px] grid-cols-[140px_30px_1fr] md:min-w-[760px] md:grid-cols-[176px_34px_1fr]" onPointerLeave={() => setCursor(null)}>
+            <div className="grid grid-cols-[84px_1fr] sm:min-w-[600px] sm:grid-cols-[150px_30px_1fr] md:min-w-[760px] md:grid-cols-[176px_34px_1fr]" onPointerLeave={() => setCursor(null)}>
               {/* header row: time axis */}
-              <div className="border-b border-line px-4 py-2 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-dim">Signal</div>
-              <div className="border-b border-l border-line py-2 text-center font-mono text-[0.62rem] text-dim">val</div>
+              <div className="border-b border-line px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-dim sm:px-4">Signal</div>
+              <div className="hidden border-b border-l border-line py-2 text-center font-mono text-[0.62rem] text-dim sm:block">val</div>
               <div className="relative border-b border-l border-line">
                 {YEARS.map((t) => (
                   <span
@@ -119,16 +118,17 @@ export function Experience() {
                       onClick={() => select(r.id)}
                       aria-pressed={active}
                       className={cn(
-                        "flex items-center gap-2 border-b border-line px-4 text-left font-mono text-[0.74rem] transition-colors",
+                        "flex min-w-0 items-center gap-2 border-b border-line px-3 text-left font-mono text-[0.72rem] transition-colors sm:px-4 sm:text-[0.74rem]",
                         active ? "bg-panel-2 text-fg" : "text-muted hover:text-fg",
                       )}
                     >
                       <span className="h-2 w-2 shrink-0 rounded-sm" style={{ background: c }} />
-                      <span className="truncate">{r.signal}</span>
+                      <span className="truncate sm:hidden">{r.signal.split(".")[0]}</span>
+                      <span className="hidden truncate sm:inline">{r.signal}</span>
                     </button>
                     <div
                       className={cn(
-                        "grid place-items-center border-b border-l border-line font-mono text-[0.74rem]",
+                        "hidden place-items-center border-b border-l border-line font-mono text-[0.74rem] sm:grid",
                         high ? "text-fg" : "text-dim",
                       )}
                       style={high ? { color: c } : undefined}
@@ -154,7 +154,7 @@ export function Experience() {
                       )}
                       {x1 - x0 > 8 && (
                         <span
-                          className="pointer-events-none absolute top-1/2 -translate-y-1/2 truncate px-2 text-left font-mono text-[0.64rem] uppercase tracking-[0.08em]"
+                          className="pointer-events-none absolute top-1/2 hidden -translate-y-1/2 truncate px-2 text-left font-mono text-[0.64rem] uppercase tracking-[0.08em] sm:block"
                           style={{ left: `${x0}%`, width: `${x1 - x0}%`, color: c }}
                         >
                           {r.org.replace(" Ltd", "")}
@@ -183,7 +183,7 @@ export function Experience() {
         >
           <div>
             <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em]" style={{ color }}>
-              probe · {role.signal} · {role.kind}
+              {role.kind}
             </p>
             <h3 className="mt-3 font-display text-2xl font-semibold text-fg md:text-3xl">{role.title}</h3>
             <p className="mt-1.5 text-muted">
@@ -221,7 +221,7 @@ export function Experience() {
 
           <div className="space-y-6">
             <div>
-              <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Measurements</p>
+              <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Key results</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {role.metrics.map((m) => (
                   <div key={m.label} className="rounded-lg border border-line bg-ink/50 px-3 py-2.5">
@@ -233,7 +233,7 @@ export function Experience() {
             </div>
             {role.tools.length > 0 && (
               <div>
-                <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Toolchain</p>
+                <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Tools</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {role.tools.map((t) => (
                     <span key={t} className="chip-tag">

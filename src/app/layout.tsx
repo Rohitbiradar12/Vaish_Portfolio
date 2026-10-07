@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
-import { BootLoader } from "@/components/layout/BootLoader";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { profile } from "@/content/profile";
 
@@ -34,11 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}>
       <body>
-        <noscript>
-          <style>{`#boot{display:none!important}`}</style>
-        </noscript>
         <SmoothScroll />
-        <BootLoader />
         {children}
       </body>
     </html>

@@ -96,7 +96,8 @@ export function CameraRig() {
 
     // Lens shift: chip sits right of the copy on wide screens, above it on tall ones.
     easing.damp(shift, "current", s, 0.25, dt);
-    const wide = aspect > 1.1;
+    // Must match the `wide` CSS variant in globals.css so copy and chip never overlap.
+    const wide = aspect > 1.1 && size.width >= 768;
     const ox = wide ? -0.17 * size.width * shift.current : 0;
     const oy = wide ? 0 : size.height * (0.17 * shift.current + 0.1 * (1 - shift.current));
     camera.setViewOffset(size.width, size.height, ox, oy, size.width, size.height);

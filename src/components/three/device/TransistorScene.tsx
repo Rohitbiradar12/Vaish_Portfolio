@@ -5,7 +5,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, ToneMapping } from "@react-three/postprocessing";
 import { easing } from "maath";
 import { ToneMappingMode } from "postprocessing";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { ShaderWarmup } from "../ShaderWarmup";
 import * as THREE from "three";
 import { DEVICE_BG, driveStrength, type DeviceState } from "./model";
 
@@ -213,11 +214,14 @@ function mulberry(seed: number) {
 
 export default function TransistorScene({ state, active }: { state: React.RefObject<DeviceState>; active: boolean }) {
   const labels = useRef<Partial<Record<LayerId, HTMLDivElement | null>>>({});
+  const [lite] = useState(() => window.matchMedia("(max-width: 768px), (pointer: coarse)").matches);
+  const [warm, setWarm] = useState(false);
+  const onWarm = useCallback(() => setWarm(true), []);
   return (
     <div className="relative h-full w-full">
       <Canvas
-        dpr={[1, 1.75]}
-        frameloop={active ? "always" : "never"}
+        dpr={[1, lite ? 1.5 : 1.75]}
+        frameloop={active && warm ? "always" : "never"}
         gl={{ antialias: false, powerPreference: "high-performance" }}
         camera={{ fov: 30, position: [0, 2.0, 9.4], near: 0.1, far: 60 }}
         aria-hidden
@@ -234,7 +238,8 @@ export default function TransistorScene({ state, active }: { state: React.RefObj
           <Lightformer form="ring" intensity={3} position={[5, 2, -5]} scale={2} color="#00e5ff" />
         </Environment>
         <Device state={state} labels={labels} />
-        <EffectComposer multisampling={4}>
+        <ShaderWarmup onReady={onWarm} offscreen />
+        <EffectComposer multisampling={lite ? 0 : 4}>
           <Bloom mipmapBlur intensity={0.9} luminanceThreshold={0.85} radius={0.6} />
           <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         </EffectComposer>

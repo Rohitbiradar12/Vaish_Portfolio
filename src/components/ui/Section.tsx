@@ -38,9 +38,6 @@ export function SectionHeader({
           <span className="text-signal">{s.code}</span>
           <span className="h-px w-10 bg-line-strong" />
           <span className="text-muted">{s.label}</span>
-          <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[0.62rem] text-dim">
-            zoom · {s.level}
-          </span>
         </div>
         <h2 className="mt-5 max-w-3xl font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-semibold leading-[1.03] tracking-[-0.02em] text-fg">
           {title}

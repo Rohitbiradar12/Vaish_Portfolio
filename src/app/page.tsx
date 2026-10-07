@@ -1,6 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
-import { ZoomRail } from "@/components/layout/ZoomRail";
+import { SectionRail } from "@/components/layout/SectionRail";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { DeviceLab } from "@/components/sections/DeviceLab";
@@ -16,7 +16,7 @@ export default function Page() {
   return (
     <>
       <Nav />
-      <ZoomRail />
+      <SectionRail />
       <main>
         <Hero />
         <div className="relative bg-ink">

@@ -15,7 +15,7 @@ export function Education() {
         id="education"
         title={
           <>
-            Grown on a <span className="text-signal">solid substrate</span>.
+            Education &amp; <span className="text-signal">coursework</span>.
           </>
         }
         lead="The bottom of the stack: materials, devices and fabrication, on top of a VLSI-focused undergraduate degree."

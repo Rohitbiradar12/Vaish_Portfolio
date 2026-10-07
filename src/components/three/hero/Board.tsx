@@ -13,7 +13,7 @@ import { PKG } from "./spec";
 
 const UP = new THREE.Vector3(0, 1, 0);
 
-/** 0..1 power-on progress, driven by the boot loader finishing. */
+/** 0..1 power-on progress, starting once the scene is ready (see Hero). */
 export function introProgress(now = performance.now()) {
   if (heroState.introStart < 0) return 0;
   return clamp01((now - heroState.introStart) / 2600);

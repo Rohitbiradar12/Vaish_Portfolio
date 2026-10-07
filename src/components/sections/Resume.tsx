@@ -2,7 +2,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { profile } from "@/content/profile";
 
-const CHECKS = ["DRC clean", "LVS clean", "Timing met", `${profile.resume.pages} pages`];
+const CONTENTS = ["Education", "Technical skills", "4 industry roles", "Projects"];
 const PAGES = [
   ["Education", "Technical skills", "Work experience"],
   ["Work experience", "Projects"],
@@ -51,7 +51,7 @@ export function Resume() {
         id="resume"
         title={
           <>
-            Tape-out: <span className="text-signal">download the datasheet</span>.
+            Download the <span className="text-signal">resume</span>.
           </>
         }
         lead="The full resume as a PDF: education, skills, four industry roles and every project, on two pages."
@@ -60,13 +60,13 @@ export function Resume() {
       <Reveal>
         <div className="panel grid items-center gap-10 overflow-hidden p-7 md:grid-cols-[minmax(0,1fr)_280px] md:p-10">
           <div>
-            <p className="kicker">GDSII stream-out · rev A</p>
+            <p className="kicker">Resume · PDF</p>
             <p className="mt-4 break-all font-display text-2xl font-semibold text-fg md:text-3xl">{profile.resume.fileName}</p>
             <p className="mt-2 font-mono text-[0.78rem] text-dim">
               PDF · {profile.resume.pages} pages · updated {profile.resume.updated}
             </p>
             <ul className="mt-6 flex flex-wrap gap-2">
-              {CHECKS.map((c) => (
+              {CONTENTS.map((c) => (
                 <li key={c} className="chip-tag !text-fg/85">
                   <span className="text-ok">✓</span> {c}
                 </li>

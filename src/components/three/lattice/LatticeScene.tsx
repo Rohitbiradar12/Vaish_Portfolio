@@ -2,7 +2,8 @@
 
 import { Environment, Lightformer } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { ShaderWarmup } from "../ShaderWarmup";
 import * as THREE from "three";
 
 const N = 2; // unit cells per edge
@@ -125,10 +126,13 @@ function Lattice() {
 }
 
 export default function LatticeScene({ active }: { active: boolean }) {
+  const [lite] = useState(() => window.matchMedia("(max-width: 768px), (pointer: coarse)").matches);
+  const [warm, setWarm] = useState(false);
+  const onWarm = useCallback(() => setWarm(true), []);
   return (
     <Canvas
-      dpr={[1, 1.75]}
-      frameloop={active ? "always" : "never"}
+      dpr={[1, lite ? 1.5 : 1.75]}
+      frameloop={active && warm ? "always" : "never"}
       gl={{ antialias: true, alpha: true }}
       camera={{ fov: 32, position: [0, 0.5, 6.8] }}
       aria-hidden
@@ -141,6 +145,7 @@ export default function LatticeScene({ active }: { active: boolean }) {
         <Lightformer form="ring" intensity={2} position={[-4, 1, -3]} scale={2} color="#c87533" />
       </Environment>
       <Lattice />
+      <ShaderWarmup onReady={onWarm} />
     </Canvas>
   );
 }

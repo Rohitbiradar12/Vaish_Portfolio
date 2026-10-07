@@ -104,7 +104,7 @@ function ProjectDialog({ project, onClose }: { project: Project; onClose: () => 
                 </span>
               ))}
             </div>
-            <p className="mt-6 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Abstraction level</p>
+            <p className="mt-6 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">Category</p>
             <p className="mt-2 text-sm text-muted">{levelMeta[project.level].blurb}</p>
           </div>
         </div>
@@ -128,9 +128,9 @@ export function Projects() {
             Taped out in the lab: <span className="text-signal">layouts to devices</span>.
           </>
         }
-        lead="Academic projects from 180nm full-custom layout down to 22nm FDSOI device behaviour. Each card is tagged with its level on the abstraction stack."
+        lead="Academic projects from 180nm full-custom layout down to 22nm FDSOI device behaviour."
         aside={
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter projects by level">
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter projects by category">
             {FILTERS.map((f) => (
               <button
                 key={f}

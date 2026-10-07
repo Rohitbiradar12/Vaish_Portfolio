@@ -2,10 +2,10 @@
 
 import { RoundedBox, Text } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import type { DieBlockId } from "@/content/experience";
-import { createDieTextures } from "./dieTexture";
+import { loadDieTextures, placeholderDieTextures, type DieTextures } from "./dieTexture";
 import { bondPoints, buildWireBonds, createLeadGeometry, leadMatrices } from "./geometry";
 import { clamp01, easeInOutCubic, heroState, smoothstep } from "./heroState";
 import { createHighlightMaterial, createNoiseTexture } from "./materials";
@@ -62,10 +62,10 @@ export function Chip({ dieTextureSize }: { dieTextureSize: number }) {
     };
   }, [noise]);
 
+  // The die starts with 1×1 placeholder maps (it is hidden under the lid at first);
+  // the real floorplan is painted in a worker and swapped in below.
   const die = useMemo(() => {
-    const t = createDieTextures(dieTextureSize);
-    const aniso = Math.min(8, gl.capabilities.getMaxAnisotropy());
-    [t.map, t.rm, t.em].forEach((x) => (x.anisotropy = aniso));
+    const t: DieTextures = placeholderDieTextures();
     const mat = new THREE.MeshPhysicalMaterial({
       map: t.map,
       roughnessMap: t.rm,
@@ -82,7 +82,28 @@ export function Chip({ dieTextureSize }: { dieTextureSize: number }) {
       clearcoatRoughness: 0.12,
     });
     return { mat, textures: t };
-  }, [dieTextureSize, gl]);
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    const aniso = Math.min(8, gl.capabilities.getMaxAnisotropy());
+    loadDieTextures(dieTextureSize, aniso).then((t) => {
+      if (!alive) {
+        Object.values(t).forEach((x) => x.dispose());
+        return;
+      }
+      const old = die.textures;
+      die.mat.map = t.map;
+      die.mat.roughnessMap = t.rm;
+      die.mat.metalnessMap = t.rm;
+      die.mat.emissiveMap = t.em;
+      die.textures = t;
+      Object.values(old).forEach((x) => x.dispose());
+    });
+    return () => {
+      alive = false;
+    };
+  }, [die, dieTextureSize, gl]);
 
   // ---------------------------------------------------------------- geometry
   const leadGeo = useMemo(() => createLeadGeometry(), []);

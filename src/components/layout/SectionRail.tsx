@@ -6,8 +6,8 @@ import { cn } from "@/lib/format";
 
 const ITEMS = sections.filter((s) => s.id !== "top");
 
-/** Side rail showing the current zoom level on the abstraction stack (xl screens, after the hero). */
-export function ZoomRail() {
+/** Section index on very wide screens, shown once the hero has scrolled away. */
+export function SectionRail() {
   const [active, setActive] = useState<SectionId | null>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function ZoomRail() {
 
   return (
     <nav
-      aria-label="Abstraction level"
+      aria-label="Sections"
       className={cn(
         "fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 2xl:block",
         visible ? "opacity-100" : "pointer-events-none opacity-0",
@@ -45,7 +45,7 @@ export function ZoomRail() {
                   )}
                 />
                 <span className={cn("transition", on ? "text-signal" : "text-dim group-hover:text-muted")}>{s.code}</span>
-                <span className={cn("transition", on ? "text-fg" : "text-dim/70 group-hover:text-muted")}>{s.level}</span>
+                <span className={cn("transition", on ? "text-fg" : "text-dim/70 group-hover:text-muted")}>{s.label}</span>
               </a>
             </li>
           );

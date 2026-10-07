@@ -15,7 +15,7 @@
 
   --color-fg: #e6edf3;
   --color-muted: #8a94a6;
-  --color-dim: #5b6676;
+  --color-dim: #748091;
 
   --color-copper: #c87533;
   --color-gold: #d4af37;
@@ -54,9 +54,25 @@
   }
 }
 
+/* Layout variants used by the hero:
+   wide  = landscape-ish screens at least tablet width (side-by-side hero)
+   short = low viewports such as phones in landscape (compact hero copy) */
+@custom-variant wide {
+  @media (min-aspect-ratio: 11/10) and (min-width: 48rem) {
+    @slot;
+  }
+}
+@custom-variant short {
+  @media (max-height: 35rem) {
+    @slot;
+  }
+}
+
 html {
   background: var(--color-ink);
   color-scheme: dark;
+  /* 16px up to 1920px wide, then grows to 20px so large monitors keep proportions */
+  font-size: clamp(16px, calc(7px + 0.46875vw), 20px);
 }
 
 body {
@@ -583,7 +599,7 @@ body {
     letter-spacing: 0.14em;
     color: var(--color-copper);
   }
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .flow-node {
       flex: 1 1 0;
     }

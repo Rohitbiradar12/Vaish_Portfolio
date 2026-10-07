@@ -50,10 +50,10 @@ export function Contact() {
         id="contact"
         title={
           <>
-            Open a <span className="text-signal">channel</span>.
+            Get in <span className="text-signal">touch</span>.
           </>
         }
-        lead="Recruiting for physical design, RTL or verification? Or just want to talk silicon? Send a message."
+        lead="Hiring for physical design, RTL design or verification? Send a message or reach out directly."
       />
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
