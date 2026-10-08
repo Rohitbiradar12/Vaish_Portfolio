@@ -20,10 +20,11 @@ const firstAuthor = publications.filter((p) => p.authors[0] === profile.name).le
 const latest = publications[0];
 const metric = (label: string) => scholar.metrics.find((m) => m.label === label)!.value;
 
+// Red / amber / green indicator LEDs from the shared categorical palette.
 const LEDS = [
-  { color: "#00e5ff", text: `${publications.length} PAPERS` },
-  { color: "#ffc94a", text: `${firstAuthor} × FIRST AUTHOR` },
-  { color: "#e05cff", text: `${latest.publisher?.toUpperCase() ?? latest.venue?.toUpperCase()} '${String(latest.year).slice(2)}` },
+  { color: "var(--cat-1)", text: `${publications.length} PAPERS` },
+  { color: "var(--cat-2)", text: `${firstAuthor} × FIRST AUTHOR` },
+  { color: "var(--cat-4)", text: `${latest.publisher?.toUpperCase() ?? latest.venue?.toUpperCase()} '${String(latest.year).slice(2)}` },
 ];
 
 // --------------------------------------------------------------------------
@@ -59,13 +60,13 @@ function Digit({ ch }: { ch: string }) {
     <svg viewBox="-8 -2 72 104" className="h-full w-auto" aria-hidden>
       <g transform="skewX(-7) translate(6 0)">
         {keys.map((k) => (
-          <polygon key={k} points={SEG[k]} fill="#0c2a30" opacity={lit.includes(k) ? 0 : 0.55} />
+          <polygon key={k} points={SEG[k]} fill="#1c1c1c" opacity={lit.includes(k) ? 0 : 0.55} />
         ))}
         <g className="seg-lit">
           {keys
             .filter((k) => lit.includes(k))
             .map((k) => (
-              <polygon key={k} points={SEG[k]} fill="#00e5ff" />
+              <polygon key={k} points={SEG[k]} fill="#f2f2f2" />
             ))}
         </g>
       </g>
@@ -178,24 +179,24 @@ function BoardSvg() {
     <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full" aria-hidden>
       <defs>
         <linearGradient id="sb-mask" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#0b1d16" />
-          <stop offset="0.55" stopColor="#07130e" />
-          <stop offset="1" stopColor="#050d0a" />
+          <stop offset="0" stopColor="#151515" />
+          <stop offset="0.55" stopColor="#0b0b0b" />
+          <stop offset="1" stopColor="#060606" />
         </linearGradient>
         <radialGradient id="sb-light" cx="0.3" cy="0.35" r="0.7">
-          <stop offset="0" stopColor="#1f5a46" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#1f5a46" stopOpacity="0" />
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.06" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="sb-pin" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#f1f3f6" />
-          <stop offset="1" stopColor="#8f97a2" />
+          <stop offset="0" stopColor="#f2f2f2" />
+          <stop offset="1" stopColor="#969696" />
         </linearGradient>
         <linearGradient id="sb-gold" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#f6d77a" />
           <stop offset="1" stopColor="#b98a2e" />
         </linearGradient>
         <pattern id="sb-grid" width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="0.9" fill="#9fe3c9" fillOpacity="0.08" />
+          <circle cx="1" cy="1" r="0.9" fill="#ffffff" fillOpacity="0.06" />
         </pattern>
         <filter id="sb-glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" />
@@ -205,7 +206,7 @@ function BoardSvg() {
       <rect width={W} height={H} rx="18" fill="url(#sb-mask)" />
       <rect width={W} height={H} rx="18" fill="url(#sb-light)" />
       <rect width={W} height={H} rx="18" fill="url(#sb-grid)" />
-      <rect x="0.5" y="0.5" width={W - 1} height={H - 1} rx="18" fill="none" stroke="#1f3b30" />
+      <rect x="0.5" y="0.5" width={W - 1} height={H - 1} rx="18" fill="none" stroke="#262626" />
 
       {/* mounting holes */}
       {[
@@ -215,7 +216,7 @@ function BoardSvg() {
         [W - 20, H - 20],
       ].map(([x, y]) => (
         <g key={`${x}-${y}`}>
-          <circle cx={x} cy={y} r="8.5" fill="#020504" stroke="url(#sb-gold)" strokeWidth="3.5" />
+          <circle cx={x} cy={y} r="8.5" fill="#030303" stroke="url(#sb-gold)" strokeWidth="3.5" />
         </g>
       ))}
 
@@ -223,13 +224,13 @@ function BoardSvg() {
       {TRACES.map((d, i) => (
         <path key={`t${i}`} d={d} fill="none" stroke="#7a5532" strokeOpacity="0.75" strokeWidth="3" strokeLinejoin="round" />
       ))}
-      <g filter="url(#sb-glow)" opacity="0.9">
+      <g filter="url(#sb-glow)" opacity="0.6">
         {TRACES.slice(0, 6).map((d, i) => (
-          <path key={`g${i}`} d={d} fill="none" stroke="#00e5ff" strokeWidth="3" className="sb-pulse" style={{ animationDelay: `${i * -0.45}s` }} />
+          <path key={`g${i}`} d={d} fill="none" stroke="#ffffff" strokeWidth="3" className="sb-pulse" style={{ animationDelay: `${i * -0.45}s` }} />
         ))}
       </g>
       {TRACES.slice(0, 6).map((d, i) => (
-        <path key={`p${i}`} d={d} fill="none" stroke="#bff8ff" strokeWidth="1.6" className="sb-pulse" style={{ animationDelay: `${i * -0.45}s` }} />
+        <path key={`p${i}`} d={d} fill="none" stroke="#ffffff" strokeWidth="1.6" className="sb-pulse" style={{ animationDelay: `${i * -0.45}s` }} />
       ))}
 
       {/* vias */}
@@ -241,7 +242,7 @@ function BoardSvg() {
       ].map(([x, y]) => (
         <g key={`v${x}-${y}`}>
           <circle cx={x} cy={y} r="5" fill="#d9b660" />
-          <circle cx={x} cy={y} r="2" fill="#030806" />
+          <circle cx={x} cy={y} r="2" fill="#030303" />
         </g>
       ))}
 
@@ -302,10 +303,11 @@ function BoardSvg() {
         const x = 575 + i * 160;
         return (
           <g key={l.text}>
-            <circle cx={x} cy="300" r="11" fill={l.color} opacity="0.35" filter="url(#sb-glow)" className="sb-led" style={{ animationDelay: `${i * 0.6}s` }} />
-            <circle cx={x} cy="300" r="6" fill={l.color} />
+            {/* fill via style: LED colours are CSS variables */}
+            <circle cx={x} cy="300" r="11" opacity="0.35" filter="url(#sb-glow)" className="sb-led" style={{ fill: l.color, animationDelay: `${i * 0.6}s` }} />
+            <circle cx={x} cy="300" r="6" style={{ fill: l.color }} />
             <circle cx={x - 1.8} cy="298" r="1.8" fill="#ffffff" opacity="0.8" />
-            <text x={x + 16} y="304" className="sb-silk" fontSize="11.5" fill="#e6edf3">
+            <text x={x + 16} y="304" className="sb-silk" fontSize="11.5" fill="#ededed">
               {l.text}
             </text>
             <text x={x - 6} y="285" className="sb-silk" fontSize="8.5" opacity="0.7">
@@ -389,7 +391,7 @@ function CompactBoard() {
         {DISPLAYS.map((d) => (
           <div key={d.label} className="space-y-1.5 text-center">
             <SegDisplay label={d.metric} value={metric(d.metric)} run={inView} className="aspect-[150/120] w-full" />
-            <p className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-[#d9ddd2]/70">{d.metric}</p>
+            <p className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-[#dedede]/70">{d.metric}</p>
           </div>
         ))}
       </div>
@@ -413,9 +415,12 @@ function CompactBoard() {
 
 export function ScholarBoard() {
   return (
-    <div className="relative overflow-hidden rounded-[18px] shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)]">
-      <DesktopBoard />
-      <CompactBoard />
+    <div className="relative overflow-hidden rounded-[18px] shadow-[0_40px_90px_-40px_var(--shadow)]">
+      {/* a black PCB in both themes, so everything on it uses the dark palette */}
+      <div data-theme="dark">
+        <DesktopBoard />
+        <CompactBoard />
+      </div>
     </div>
   );
 }

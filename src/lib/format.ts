@@ -26,6 +26,6 @@ export const fmtDuration = (months: number) => {
 };
 
 /** Each role shares its colour with the die block it lights up in the hero. */
-export const roleColor = (role: Role) => (role.dieBlock ? BLOCKS[role.dieBlock].color : "#8a94a6");
+export const roleColor = (role: Role) => (role.dieBlock ? BLOCKS[role.dieBlock].cat : "var(--muted)");
 
 export const cn = (...parts: (string | false | null | undefined)[]) => parts.filter(Boolean).join(" ");

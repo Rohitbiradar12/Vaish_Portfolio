@@ -16,10 +16,10 @@ export function Publications() {
         id="publications"
         title={
           <>
-            Research &amp; <span className="text-signal">publications</span>.
+            Research &amp; <span className="text-muted">publications</span>.
           </>
         }
-        lead="Four papers from her undergraduate research in embedded systems, FPGA design and IoT."
+        lead="Four papers from my undergraduate research in embedded systems, FPGA design and IoT."
       />
 
       <Reveal>

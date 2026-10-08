@@ -41,11 +41,11 @@ export function SectionRail() {
                 <span
                   className={cn(
                     "absolute -left-[3.5px] h-[7px] w-[7px] rounded-full border transition",
-                    on ? "border-signal bg-signal shadow-[0_0_10px_var(--color-signal)]" : "border-line-strong bg-ink",
+                    on ? "border-signal bg-signal shadow-[0_0_10px_var(--glow)]" : "border-line-strong bg-ink",
                   )}
                 />
                 <span className={cn("transition", on ? "text-signal" : "text-dim group-hover:text-muted")}>{s.code}</span>
-                <span className={cn("transition", on ? "text-fg" : "text-dim/70 group-hover:text-muted")}>{s.label}</span>
+                <span className={cn("transition", on ? "text-fg" : "text-dim group-hover:text-muted")}>{s.label}</span>
               </a>
             </li>
           );

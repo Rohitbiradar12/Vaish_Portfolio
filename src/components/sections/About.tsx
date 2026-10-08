@@ -17,7 +17,7 @@ function Portrait() {
             className="object-cover object-[center_28%]"
           />
           {/* probe-camera framing: soft vignette, caption fade and HUD corners */}
-          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_60px_rgba(5,8,11,0.55)]" aria-hidden />
+          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_60px_color-mix(in_oklab,var(--ink)_55%,transparent)]" aria-hidden />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/85 to-transparent" aria-hidden />
           <div className="hud-corners pointer-events-none absolute inset-3 opacity-60" aria-hidden />
         </>
@@ -25,23 +25,23 @@ function Portrait() {
         <svg viewBox="0 0 400 500" className="absolute inset-0 h-full w-full" aria-hidden>
           <defs>
             <pattern id="rows" width="400" height="7" patternUnits="userSpaceOnUse">
-              <rect width="400" height="5.6" fill="#161c27" />
+              <rect width="400" height="5.6" fill="#1c1c1c" />
             </pattern>
             <radialGradient id="glow" cx="50%" cy="42%" r="60%">
-              <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
             </radialGradient>
           </defs>
-          <rect width="400" height="500" fill="#0b1016" />
+          <rect width="400" height="500" fill="#0d0d0d" />
           <rect x="40" y="60" width="320" height="380" fill="url(#rows)" opacity="0.8" />
           {Array.from({ length: 6 }, (_, i) => (
-            <rect key={i} x={70 + i * 52} y="60" width="6" height="380" fill="#8a94a6" opacity="0.12" />
+            <rect key={i} x={70 + i * 52} y="60" width="6" height="380" fill="#9a9a9a" opacity="0.12" />
           ))}
-          <rect x="40" y="60" width="320" height="380" fill="none" stroke="#2a3442" strokeWidth="2" />
-          <rect x="52" y="72" width="296" height="356" fill="none" stroke="#2a3442" strokeWidth="1" />
+          <rect x="40" y="60" width="320" height="380" fill="none" stroke="#2e2e2e" strokeWidth="2" />
+          <rect x="52" y="72" width="296" height="356" fill="none" stroke="#2e2e2e" strokeWidth="1" />
           <rect width="400" height="500" fill="url(#glow)" />
-          <polygon points="200,175 252,205 252,265 200,295 148,265 148,205" fill="none" stroke="#00e5ff" strokeOpacity="0.8" strokeWidth="2" />
-          <text x="200" y="248" textAnchor="middle" fontFamily="var(--font-jetbrains-mono)" fontSize="38" fontWeight="700" fill="#e6edf3">
+          <polygon points="200,175 252,205 252,265 200,295 148,265 148,205" fill="none" stroke="#ffffff" strokeOpacity="0.8" strokeWidth="2" />
+          <text x="200" y="248" textAnchor="middle" fontFamily="var(--font-jetbrains-mono)" fontSize="38" fontWeight="700" fill="#ededed">
             {profile.initials}
           </text>
         </svg>
@@ -61,7 +61,7 @@ export function About() {
         id="about"
         title={
           <>
-            One engineer, <span className="text-signal">every layer</span> of the chip.
+            One engineer, <span className="text-muted">every layer</span> of the chip.
           </>
         }
         lead="Device physics, full-custom layout, RTL design and RTL-to-GDSII physical design."

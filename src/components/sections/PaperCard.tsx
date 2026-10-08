@@ -108,7 +108,7 @@ function PaperThumb({ p }: { p: Publication }) {
   const box = Math.min(16, (106 - (n - 1) * 6) / n);
   const lines = (x: number, y0: number, count: number, seed: number) =>
     Array.from({ length: count }, (_, i) => (
-      <rect key={`${x}-${y0}-${i}`} x={x} y={y0 + i * 7} width={i % 6 === 5 ? 70 : 118 - ((i * seed) % 9) * 2} height="3" rx="1" fill="#cfd2d8" />
+      <rect key={`${x}-${y0}-${i}`} x={x} y={y0 + i * 7} width={i % 6 === 5 ? 70 : 118 - ((i * seed) % 9) * 2} height="3" rx="1" fill="#cfcfcf" />
     ));
   const bodyTop = ab + 44;
   const leftRows = Math.max(4, Math.floor((370 - bodyTop) / 7));
@@ -117,21 +117,21 @@ function PaperThumb({ p }: { p: Publication }) {
       <div className="paper-back" aria-hidden />
       <svg viewBox="0 0 300 388" className="paper-front" role="img" aria-label={`First page of "${p.title}"`}>
         <rect width="300" height="388" fill="#f6f6f3" />
-        <text x="22" y="24" fontFamily={SERIF} fontStyle="italic" fontSize="8.5" fill="#5b6270">
+        <text x="22" y="24" fontFamily={SERIF} fontStyle="italic" fontSize="8.5" fill="#5e5e5e">
           {headVenue}
         </text>
-        <text x="278" y="24" textAnchor="end" fontFamily="ui-monospace, monospace" fontSize="6" fill="#8a909b">
+        <text x="278" y="24" textAnchor="end" fontFamily="ui-monospace, monospace" fontSize="6" fill="#8d8d8d">
           {code}
         </text>
-        <line x1="22" y1="31" x2="278" y2="31" stroke="#c9ccd3" />
-        <text fontFamily={SERIF} fontWeight="700" fontSize="13" fill="#14171c">
+        <line x1="22" y1="31" x2="278" y2="31" stroke="#cacaca" />
+        <text fontFamily={SERIF} fontWeight="700" fontSize="13" fill="#161616">
           {titleLines.map((l, i) => (
             <tspan key={`${l}-${i}`} x="22" y={ty + i * 16}>
               {l}
             </tspan>
           ))}
         </text>
-        <text fontFamily={SERIF} fontSize="7.2" fill="#3f4652">
+        <text fontFamily={SERIF} fontSize="7.2" fill="#434343">
           {authorLines.map((l, i) => (
             <tspan key={`${l}-${i}`} x="22" y={ay + i * 9.5}>
               {l}
@@ -139,36 +139,36 @@ function PaperThumb({ p }: { p: Publication }) {
           ))}
         </text>
         {p.affiliation && (
-          <text x="22" y={ay + authorLines.length * 9.5 + 6} fontFamily={SERIF} fontStyle="italic" fontSize="6.2" fill="#6b7280">
+          <text x="22" y={ay + authorLines.length * 9.5 + 6} fontFamily={SERIF} fontStyle="italic" fontSize="6.2" fill="#6e6e6e">
             Dept. of ECE, Dayananda Sagar College of Engineering, Bengaluru
           </text>
         )}
-        <text x="22" y={ab + 6} fontFamily={SERIF} fontWeight="700" fontSize="7.4" fill="#14171c">
+        <text x="22" y={ab + 6} fontFamily={SERIF} fontWeight="700" fontSize="7.4" fill="#161616">
           Abstract.
         </text>
         {[208, 256, 240, 252, 180].map((w, i) => (
-          <rect key={i} x={i === 0 ? 62 : 22} y={ab + 1 + i * 7} width={w} height="3" rx="1" fill="#c4c8cf" />
+          <rect key={i} x={i === 0 ? 62 : 22} y={ab + 1 + i * 7} width={w} height="3" rx="1" fill="#c6c6c6" />
         ))}
         {lines(22, bodyTop, leftRows, 3)}
         {lines(160, bodyTop, 3, 5)}
         <g transform={`translate(160 ${bodyTop + 24})`}>
-          <rect width="118" height="58" rx="3" fill="#eef0f3" stroke="#d5d8de" />
+          <rect width="118" height="58" rx="3" fill="#efefef" stroke="#d7d7d7" />
           {p.flow.map((s, i) => {
             const x = 6 + i * (box + 6) + (106 - (n * box + (n - 1) * 6)) / 2;
             return (
               <g key={s.id}>
-                <rect x={x} y="18" width={box} height={box} rx="2" fill="#1b2230" />
-                <rect x={x + box / 4} y={18 + box / 2 - 2} width={box / 2} height="4" rx="1" fill="#00c8e0" />
-                {i < n - 1 && <path d={`M${x + box} ${18 + box / 2} h6`} stroke="#0aa6bd" strokeWidth="1.3" />}
+                <rect x={x} y="18" width={box} height={box} rx="2" fill="#2a2a2a" />
+                <rect x={x + box / 4} y={18 + box / 2 - 2} width={box / 2} height="4" rx="1" fill="#9a9a9a" />
+                {i < n - 1 && <path d={`M${x + box} ${18 + box / 2} h6`} stroke="#7a7a7a" strokeWidth="1.3" />}
               </g>
             );
           })}
-          <text x="59" y="50" textAnchor="middle" fontFamily={SERIF} fontSize="5.6" fill="#5b6270">
+          <text x="59" y="50" textAnchor="middle" fontFamily={SERIF} fontSize="5.6" fill="#5e5e5e">
             FIG. 1. {p.flowSource === "abstract" ? "System flow." : "Concept."}
           </text>
         </g>
         {lines(160, bodyTop + 90, Math.max(2, leftRows - 13), 7)}
-        <text x="150" y="380" textAnchor="middle" fontFamily={SERIF} fontSize="6.5" fill="#8a909b">
+        <text x="150" y="380" textAnchor="middle" fontFamily={SERIF} fontSize="6.5" fill="#8d8d8d">
           {firstPage}
         </text>
       </svg>
@@ -406,7 +406,7 @@ export function PaperCard({ p, index }: { p: Publication; index: number }) {
               className={cn(
                 "rounded-full px-5 py-2.5 text-sm font-semibold transition",
                 p.featured
-                  ? "bg-signal text-ink shadow-[0_0_30px_-8px_rgba(0,229,255,0.7)] hover:brightness-110"
+                  ? "btn-primary"
                   : "border border-signal/50 bg-signal/10 text-fg hover:bg-signal/20",
               )}
             >

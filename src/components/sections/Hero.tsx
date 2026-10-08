@@ -46,12 +46,12 @@ const CAPTION_POS =
 function StageCaption({ progress, index }: { progress: MotionValue<number>; index: number }) {
   const st = STAGES[index];
   const role = roleFor(st.block);
-  const color = BLOCKS[st.block].color;
+  const color = BLOCKS[st.block].cat;
   const opacity = useTransform(progress, [st.start - 0.012, st.start + 0.012, st.end - 0.018, st.end + 0.004], [0, 1, 1, 0]);
   const y = useTransform(progress, [st.start - 0.012, st.start + 0.012], [18, 0]);
   return (
     <motion.div style={{ opacity, y }} className={`${CAPTION_POS} wide:w-[25rem]`}>
-      <div className="panel p-5 wide:p-6 short:p-4" style={{ borderColor: `${color}55` }}>
+      <div className="panel p-5 wide:p-6 short:p-4" style={{ borderColor: `color-mix(in oklab, ${color} 35%, transparent)` }}>
         <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em]" style={{ color }}>
           {role.org} · {yearSpan(role.start, role.end)}
         </p>
@@ -103,16 +103,19 @@ export function Hero() {
   const hintOpacity = useTransform(scrollYProgress, [0, 0.03], [1, 0]);
 
   return (
-    <section id="top" ref={ref} className="relative h-[500vh] md:h-[620vh]" aria-label="Introduction">
-      <div className="sticky top-0 h-svh overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_68%_42%,#0f1a22,transparent_62%)]" />
+    // The hero is a dark stage in both themes: the 3D chip reads best on charcoal.
+    <section id="top" ref={ref} data-theme="dark" className="relative h-[500vh] md:h-[620vh]" aria-label="Introduction">
+      <div className="sticky top-0 h-svh overflow-hidden bg-(--stage)">
+        <div className="hero-glow absolute inset-0" />
         <div className={cn("absolute inset-0 transition-opacity duration-1000", ready ? "opacity-100" : "opacity-0")}>
           {webgl && <HeroScene active={active} />}
           {webgl === false && (
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,#12202a,transparent_60%)]" />
+            <div className="hero-glow absolute inset-0" />
           )}
         </div>
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,11,0.95)_0%,rgba(5,8,11,0.5)_45%,transparent_70%)] wide:bg-[linear-gradient(90deg,rgba(5,8,11,0.88)_0%,rgba(5,8,11,0.45)_38%,transparent_62%)]" />
+        <div className="hero-scrim pointer-events-none absolute inset-0" />
+        {/* dark theme: the charcoal stage fades into the black page below */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-b from-transparent to-black opacity-0 [:root[data-theme=dark]_&]:opacity-100" aria-hidden />
 
         {/* subtle frame */}
         <div className="hud-corners pointer-events-none absolute inset-3 opacity-60 wide:inset-6" aria-hidden />
@@ -133,7 +136,7 @@ export function Hero() {
           <div className="mt-7 flex flex-wrap gap-3 short:mt-4">
             <a
               href="#experience"
-              className="rounded-full bg-signal px-5 py-2.5 text-sm font-semibold text-ink shadow-[0_0_30px_-6px_rgba(0,229,255,0.7)] transition hover:brightness-110"
+              className="btn-primary rounded-full px-5 py-2.5 text-sm font-semibold"
             >
               View experience
             </a>
@@ -149,7 +152,7 @@ export function Hero() {
             <span className="chip-tag">RISC-V · 1.0 GHz · 28nm</span>
             <span className="chip-tag">CNN accel · 2.4 TOPS</span>
             <a href="#publications" className="chip-tag !text-fg/90 transition hover:!border-signal/60">
-              <span className="h-1.5 w-1.5 rounded-full bg-ok shadow-[0_0_8px_var(--color-ok)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-ok shadow-[0_0_8px_var(--ok)]" />
               Google Scholar · {citations} citations
             </a>
           </div>
@@ -160,7 +163,7 @@ export function Hero() {
           <p className="kicker">Experience at a glance</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-fg wide:text-4xl short:text-2xl">Four industry roles, one chip</h2>
           <p className="mt-3 text-muted short:text-sm">
-            Each highlighted block on this die is a role she held. Keep scrolling to explore them.
+            Each highlighted block on this die is a role I held. Keep scrolling to explore them.
           </p>
         </motion.div>
 
@@ -171,7 +174,7 @@ export function Hero() {
         {/* outro */}
         <motion.div
           style={{ opacity: outroOpacity }}
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-[linear-gradient(0deg,rgba(5,8,11,0.96)_0%,rgba(5,8,11,0.75)_45%,transparent_100%)]"
+          className="hero-scrim-outro pointer-events-none absolute inset-x-0 bottom-0 h-[55%]"
         />
         <motion.div
           style={{ opacity: outroOpacity }}

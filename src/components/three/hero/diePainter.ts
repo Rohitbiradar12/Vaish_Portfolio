@@ -27,7 +27,7 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   const rm = (rough: number, metal: number) => `rgb(0,${Math.round(rough * 255)},${Math.round(metal * 255)})`;
 
   // 1. substrate ---------------------------------------------------------
-  g.fillStyle = "#151922";
+  g.fillStyle = "#161616";
   g.fillRect(0, 0, S, S);
   r.fillStyle = rm(0.5, 0.25);
   r.fillRect(0, 0, S, S);
@@ -38,7 +38,7 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   const coreBox = box(core);
 
   // 2. sea of standard cells (glue logic) --------------------------------
-  stdCells(g, coreBox, 7 * k, ["#242a39", "#29303f", "#212735", "#2c3344", "#1f2531"], rand, k);
+  stdCells(g, coreBox, 7 * k, ["#252525", "#2a2a2a", "#222222", "#2d2d2d", "#202020"], rand, k);
   rails(g, r, coreBox, 7 * k, k, rm(0.32, 0.9));
 
   // 3. macros -------------------------------------------------------------
@@ -51,13 +51,13 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   stdCells(g, br, 5 * k, ["#1f3a2e", "#244435", "#1b3328", "#29503c"], rand, k);
   rails(g, r, br, 5 * k, k, rm(0.32, 0.9));
   const pe = box(SUPPORT_BLOCKS.periph);
-  stdCells(g, pe, 6 * k, ["#263044", "#2b3650", "#222b3d"], rand, k);
+  stdCells(g, pe, 6 * k, ["#2a2a2a", "#303030", "#262626"], rand, k);
   rails(g, r, pe, 6 * k, k, rm(0.32, 0.9));
 
   // block outlines (+ faint emissive outline in the block's colour)
   for (const b of Object.values(BLOCKS)) {
     const [x, y, w, h] = box(b.rect);
-    g.strokeStyle = "rgba(200,210,226,0.55)";
+    g.strokeStyle = "rgba(205,205,205,0.55)";
     g.lineWidth = 2.2 * k;
     g.strokeRect(x, y, w, h);
     e.strokeStyle = hexA(b.color, 0.55);
@@ -66,20 +66,20 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   }
   for (const rc of Object.values(SUPPORT_BLOCKS)) {
     const [x, y, w, h] = box(rc);
-    g.strokeStyle = "rgba(200,210,226,0.4)";
+    g.strokeStyle = "rgba(205,205,205,0.4)";
     g.lineWidth = 2 * k;
     g.strokeRect(x, y, w, h);
   }
 
   // 4. top-metal power straps over the whole core ------------------------
   for (let x = coreBox[0] + 38 * k; x < coreBox[0] + coreBox[2]; x += 104 * k) {
-    g.fillStyle = "rgba(178,188,204,0.3)";
+    g.fillStyle = "rgba(190,190,190,0.3)";
     g.fillRect(x, coreBox[1], 9 * k, coreBox[3]);
     r.fillStyle = rm(0.4, 0.6);
     r.fillRect(x, coreBox[1], 9 * k, coreBox[3]);
   }
   for (let y = coreBox[1] + 52 * k; y < coreBox[1] + coreBox[3]; y += 128 * k) {
-    g.fillStyle = "rgba(178,188,204,0.2)";
+    g.fillStyle = "rgba(190,190,190,0.2)";
     g.fillRect(coreBox[0], y, coreBox[2], 7 * k);
     r.fillStyle = rm(0.42, 0.55);
     r.fillRect(coreBox[0], y, coreBox[2], 7 * k);
@@ -87,8 +87,8 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
 
   // 5. core power rings, I/O ring, bond pads, seal ring ------------------
   for (const [inset, col] of [
-    [-10, "#8a93a4"],
-    [-28, "#737c8e"],
+    [-10, "#929292"],
+    [-28, "#7a7a7a"],
   ] as const) {
     const lw = 12 * k;
     g.strokeStyle = col;
@@ -112,25 +112,25 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
       const iu = (cx / (2 * DIE.half) + 0.5) * S;
       const iv = (cz / (2 * DIE.half) + 0.5) * S;
       // I/O driver cell between pad and core
-      g.fillStyle = "#283143";
+      g.fillStyle = "#2c2c2c";
       g.fillRect(iu - padHalf * 0.9, iv - padHalf * 0.9, padHalf * 1.8, padHalf * 1.8);
-      g.fillStyle = "#323d52";
+      g.fillStyle = "#363636";
       for (let s = 0; s < 6; s++) {
         const o = -padHalf * 0.8 + s * padHalf * 0.3;
         if (side % 2 === 0) g.fillRect(iu - padHalf * 0.9, iv + o, padHalf * 1.8, padHalf * 0.12);
         else g.fillRect(iu + o, iv - padHalf * 0.9, padHalf * 0.12, padHalf * 1.8);
       }
       // bond pad: bare aluminium with passivation opening
-      g.fillStyle = "#c4cad4";
+      g.fillStyle = "#c8c8c8";
       g.fillRect(u - padHalf, v - padHalf, padHalf * 2, padHalf * 2);
-      g.fillStyle = "#aab2bf";
+      g.fillStyle = "#b0b0b0";
       g.fillRect(u - padHalf + 6 * k, v - padHalf + 6 * k, padHalf * 2 - 12 * k, padHalf * 2 - 12 * k);
       r.fillStyle = rm(0.18, 1);
       r.fillRect(u - padHalf, v - padHalf, padHalf * 2, padHalf * 2);
     }
   }
 
-  g.strokeStyle = "#8d96a7";
+  g.strokeStyle = "#949494";
   g.lineWidth = 5 * k;
   g.strokeRect(7 * k, 7 * k, S - 14 * k, S - 14 * k);
   g.lineWidth = 3 * k;
@@ -140,7 +140,7 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   r.strokeRect(10 * k, 10 * k, S - 20 * k, S - 20 * k);
 
   // 6. etched labels + chip art --------------------------------------------
-  g.fillStyle = "rgba(214,221,232,0.85)";
+  g.fillStyle = "rgba(222,222,222,0.85)";
   g.textBaseline = "top";
   g.font = `bold ${Math.round(17 * k)}px monospace`;
   for (const b of Object.values(BLOCKS)) {
@@ -153,35 +153,8 @@ export function paintDie(size: number, make: (size: number) => PaintTarget): [Pa
   g.fillText("APB PERIPH", box(SUPPORT_BLOCKS.periph)[0] + 8 * k, box(SUPPORT_BLOCKS.periph)[1] + 8 * k);
 
   g.font = `bold ${Math.round(13 * k)}px monospace`;
-  g.fillStyle = "rgba(214,221,232,0.7)";
+  g.fillStyle = "rgba(222,222,222,0.7)";
   g.fillText("VP-SILICON  ·  VAISHNAVI PATIL  ·  NEU 2026  ·  RTL>GDSII", coreBox[0] + 14 * k, 0.9 * S - 2 * k);
-
-  // monogram in the free die corner
-  const cx = 0.952 * S;
-  const cy = 0.952 * S;
-  const rr = 30 * k;
-  g.strokeStyle = "rgba(214,221,232,0.85)";
-  g.lineWidth = 3 * k;
-  g.beginPath();
-  for (let i = 0; i < 6; i++) {
-    const a = (Math.PI / 3) * i + Math.PI / 6;
-    const X = cx + Math.cos(a) * rr;
-    const Y = cy + Math.sin(a) * rr;
-    if (i === 0) g.moveTo(X, Y);
-    else g.lineTo(X, Y);
-  }
-  g.closePath();
-  g.stroke();
-  g.font = `bold ${Math.round(22 * k)}px monospace`;
-  g.textAlign = "center";
-  g.textBaseline = "middle";
-  g.fillStyle = "rgba(214,221,232,0.9)";
-  g.fillText("VP", cx, cy + 1 * k);
-  e.fillStyle = "rgba(0,229,255,0.5)";
-  e.font = g.font;
-  e.textAlign = "center";
-  e.textBaseline = "middle";
-  e.fillText("VP", cx, cy + 1 * k);
 
   return [cMap, cRm, cEm];
 }
@@ -204,7 +177,7 @@ function stdCells(g: Ctx, [x, y, w, h]: Box, rowH: number, palette: string[], ra
 
 function rails(g: Ctx, r: Ctx, [x, y, w, h]: Box, rowH: number, k: number, metal: string) {
   for (let yy = y + rowH - 1.3 * k; yy < y + h; yy += rowH) {
-    g.fillStyle = "#454d5f";
+    g.fillStyle = "#4a4a4a";
     g.fillRect(x, yy, w, 1.3 * k);
     r.fillStyle = metal;
     r.fillRect(x, yy, w, 1.3 * k);
@@ -222,24 +195,24 @@ function grid(g: Ctx, [x, y, w, h]: Box, step: number, base: string, line: strin
 
 function sram(g: Ctx, r: Ctx, b: Box, rand: () => number, k: number, rm: (a: number, m: number) => string) {
   const [x, y, w, h] = b;
-  grid(g, [x, y, w, h * 0.88], 4 * k, "#2a3550", "#34415f", "rgba(16,22,36,0.55)", k);
-  stdCells(g, [x + w * 0.46, y, w * 0.08, h * 0.88], 4 * k, ["#3a4562", "#434f6e", "#323c57"], rand, k);
-  stdCells(g, [x, y + h * 0.88, w, h * 0.12], 4 * k, ["#3a4562", "#434f6e", "#2f3953"], rand, k);
+  grid(g, [x, y, w, h * 0.88], 4 * k, "#2e2e2e", "#383838", "rgba(20,20,20,0.55)", k);
+  stdCells(g, [x + w * 0.46, y, w * 0.08, h * 0.88], 4 * k, ["#3e3e3e", "#474747", "#363636"], rand, k);
+  stdCells(g, [x, y + h * 0.88, w, h * 0.12], 4 * k, ["#3e3e3e", "#474747", "#333333"], rand, k);
   r.fillStyle = rm(0.36, 0.5);
   r.fillRect(x, y, w, h);
 }
 
 function riscv(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm: (a: number, m: number) => string) {
   const [x, y, w, h] = b;
-  stdCells(g, b, 6 * k, ["#2a2645", "#302a50", "#25213e", "#372f5b", "#2b2748"], rand, k);
+  stdCells(g, b, 6 * k, ["#2e2224", "#35262a", "#291e20", "#3b2a2e", "#2f2326"], rand, k);
   rails(g, r, b, 6 * k, k, rm(0.32, 0.9));
   // register file + instruction / data caches
   const rf: Box = [x + w * 0.05, y + h * 0.1, w * 0.3, h * 0.24];
   const ic: Box = [x + w * 0.66, y + h * 0.1, w * 0.29, h * 0.36];
   const dc: Box = [x + w * 0.66, y + h * 0.52, w * 0.29, h * 0.36];
   for (const m of [rf, ic, dc]) {
-    grid(g, m, 4 * k, "#3a2f5e", "#46397a", "rgba(18,14,34,0.5)", k);
-    g.strokeStyle = "rgba(200,190,240,0.45)";
+    grid(g, m, 4 * k, "#3d2a2e", "#4a3237", "rgba(30,16,18,0.5)", k);
+    g.strokeStyle = "rgba(240,200,205,0.45)";
     g.lineWidth = 1.6 * k;
     g.strokeRect(...m);
     r.fillStyle = rm(0.36, 0.5);
@@ -250,12 +223,12 @@ function riscv(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm
   const n = 32;
   const sw = dp[2] / n;
   for (let i = 0; i < n; i++) {
-    g.fillStyle = i % 2 ? "#3b3366" : "#433a73";
+    g.fillStyle = i % 2 ? "#40292d" : "#4a2f34";
     g.fillRect(dp[0] + i * sw, dp[1], sw - 1.2 * k, dp[3]);
-    g.fillStyle = "rgba(220,210,255,0.18)";
+    g.fillStyle = "rgba(255,220,225,0.18)";
     for (let s = 0; s < 6; s++) g.fillRect(dp[0] + i * sw, dp[1] + (s + 0.5) * (dp[3] / 6), sw - 1.2 * k, 2 * k);
   }
-  e.fillStyle = "rgba(0,229,255,0.16)";
+  e.fillStyle = "rgba(222,57,81,0.2)";
   e.fillRect(...dp);
 }
 
@@ -276,7 +249,7 @@ function cnn(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm: 
       g.fillRect(tx + tw * 0.08, ty + th * 0.1, tw * 0.5, th * 0.5); // multiplier
       g.fillStyle = "#6e5c34";
       g.fillRect(tx + tw * 0.68, ty + th * 0.1, tw * 0.2, th * 0.8); // accumulator
-      e.fillStyle = "rgba(255,196,90,0.2)";
+      e.fillStyle = "rgba(230,160,40,0.2)";
       e.fillRect(tx + tw * 0.08, ty + th * 0.1, tw * 0.5, th * 0.5);
     }
   }
@@ -292,12 +265,12 @@ function cnn(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm: 
 
 function ddr4(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm: (a: number, m: number) => string) {
   const [x, y, w, h] = b;
-  g.fillStyle = "#16232a";
+  g.fillStyle = "#1f1a26";
   g.fillRect(x, y, w, h);
   // DLL / PLL: concentric analog structure on the left
   const pw = w * 0.075;
   for (let i = 0; i < 6; i++) {
-    g.strokeStyle = i % 2 ? "#3d5c66" : "#567c88";
+    g.strokeStyle = i % 2 ? "#4a3f5c" : "#625478";
     g.lineWidth = 3 * k;
     const inset = 6 * k + i * 7 * k;
     g.strokeRect(x + inset, y + inset, pw - 2 * inset, h - 2 * inset);
@@ -309,15 +282,15 @@ function ddr4(g: Ctx, r: Ctx, e: Ctx, b: Box, rand: () => number, k: number, rm:
   for (let i = 0; i < n; i++) {
     const ox = sx + i * sw;
     for (let f = 0; f < 7; f++) {
-      g.fillStyle = f % 2 ? "#2a424a" : "#3f6470";
+      g.fillStyle = f % 2 ? "#33293f" : "#4a3c5c";
       g.fillRect(ox + 4 * k + f * ((sw - 10 * k) / 7), y + 5 * k, (sw - 10 * k) / 7 - 1.5 * k, h * 0.42);
     }
     for (let s = 0; s < 8; s++) {
-      g.fillStyle = s % 2 ? "#26393f" : "#345059";
+      g.fillStyle = s % 2 ? "#2c2436" : "#3d3250";
       g.fillRect(ox + 4 * k, y + h * 0.5 + s * 3.2 * k, sw - 10 * k, 2 * k);
     }
-    stdCells(g, [ox + 4 * k, y + h * 0.76, sw - 10 * k, h * 0.2], 3.5 * k, ["#24363d", "#2c434b", "#1e2e34"], rand, k);
-    e.fillStyle = "rgba(224,92,255,0.18)";
+    stdCells(g, [ox + 4 * k, y + h * 0.76, sw - 10 * k, h * 0.2], 3.5 * k, ["#2b2335", "#342a40", "#241d2c"], rand, k);
+    e.fillStyle = "rgba(160,120,205,0.2)";
     e.fillRect(ox + 4 * k, y + 5 * k, sw - 10 * k, h * 0.42);
   }
   r.fillStyle = rm(0.34, 0.6);

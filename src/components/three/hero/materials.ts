@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { BG } from "./spec";
 
 /**
  * PCB traces: muted copper under the solder mask, with signal pulses that
@@ -14,8 +13,9 @@ export function createTraceMaterial() {
       uReveal: { value: 0 },
       uActivity: { value: 1 },
       uBase: { value: new THREE.Color("#3a2716") },
-      uPulse: { value: new THREE.Color("#00e5ff") },
-      uFogColor: { value: new THREE.Color(BG) },
+      uPulse: { value: new THREE.Color("#ffffff") },
+      // copied from scene.fog every frame (Board.tsx), so it follows the theme
+      uFogColor: { value: new THREE.Color(0, 0, 0) },
       uFogNear: { value: 12 },
       uFogFar: { value: 30 },
     },

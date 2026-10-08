@@ -3,7 +3,11 @@
 
 import type { DieBlockId } from "@/content/experience";
 
-export const BG = "#05080b";
+/**
+ * Scene background and fog: a deep charcoal stage in both page themes. ACES tone
+ * mapping darkens it, so this renders as --stage (#121214); sampled to check.
+ */
+export const BG = "#242426";
 
 export const PKG = {
   half: 2.0,
@@ -48,15 +52,17 @@ export function sideFrame(k: number) {
 
 // ---------------------------------------------------------------------------
 // Die floorplan, normalised [0..1] die coordinates (u → +x, v → +z).
-// The four highlighted blocks map one-to-one to her industry roles.
+// The four highlighted blocks map one-to-one to the industry roles.
 // ---------------------------------------------------------------------------
 export type Rect = [u0: number, v0: number, u1: number, v1: number];
 
-export const BLOCKS: Record<DieBlockId, { rect: Rect; color: string; etch: string }> = {
-  riscv: { rect: [0.12, 0.12, 0.47, 0.46], color: "#00e5ff", etch: "RV32IM CORE" },
-  cnn: { rect: [0.52, 0.12, 0.88, 0.5], color: "#ffc94a", etch: "PE ARRAY 16x16" },
-  ddr4: { rect: [0.12, 0.76, 0.88, 0.88], color: "#e05cff", etch: "DDR4 PHY x16" },
-  bridge: { rect: [0.52, 0.54, 0.66, 0.7], color: "#3ddc97", etch: "AHB2APB" },
+// `color` is the dark-theme step, used in the 3D die (always dark); `cat` is the
+// matching CSS variable for page UI, which switches steps with the theme.
+export const BLOCKS: Record<DieBlockId, { rect: Rect; color: string; cat: string; etch: string }> = {
+  riscv: { rect: [0.12, 0.12, 0.47, 0.46], color: "#de3951", cat: "var(--cat-1)", etch: "RV32IM CORE" },
+  cnn: { rect: [0.52, 0.12, 0.88, 0.5], color: "#c48300", cat: "var(--cat-2)", etch: "PE ARRAY 16x16" },
+  ddr4: { rect: [0.12, 0.76, 0.88, 0.88], color: "#906eb5", cat: "var(--cat-3)", etch: "DDR4 PHY x16" },
+  bridge: { rect: [0.52, 0.54, 0.66, 0.7], color: "#0e8c6d", cat: "var(--cat-4)", etch: "AHB2APB" },
 };
 
 export const SUPPORT_BLOCKS: Record<string, Rect> = {

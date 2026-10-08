@@ -87,20 +87,20 @@ export function Board() {
 
   const mats = useMemo(
     () => ({
-      board: new THREE.MeshStandardMaterial({ color: "#0b1210", roughness: 0.92, metalness: 0, roughnessMap: noise }),
+      board: new THREE.MeshStandardMaterial({ color: "#0c0c0c", roughness: 0.92, metalness: 0, roughnessMap: noise }),
       enig: new THREE.MeshStandardMaterial({ color: "#e0bd68", metalness: 1, roughness: 0.34 }),
-      hole: new THREE.MeshBasicMaterial({ color: "#010202" }),
-      silk: new THREE.MeshBasicMaterial({ color: "#d9ddd2", transparent: true, opacity: 0.55 }),
+      hole: new THREE.MeshBasicMaterial({ color: "#020202" }),
+      silk: new THREE.MeshBasicMaterial({ color: "#dedede", transparent: true, opacity: 0.55 }),
       ceramic: new THREE.MeshStandardMaterial({ color: "#a8875c", roughness: 0.7 }),
       resistor: new THREE.MeshStandardMaterial({ color: "#16171a", roughness: 0.55 }),
-      tin: new THREE.MeshStandardMaterial({ color: "#d6d9de", metalness: 1, roughness: 0.32 }),
-      pkg: new THREE.MeshPhysicalMaterial({ color: "#141518", roughness: 0.62, clearcoat: 0.25, clearcoatRoughness: 0.5 }),
-      ferrite: new THREE.MeshStandardMaterial({ color: "#2b2d31", roughness: 0.78 }),
-      can: new THREE.MeshStandardMaterial({ color: "#c9ccd1", metalness: 1, roughness: 0.38 }),
+      tin: new THREE.MeshStandardMaterial({ color: "#d9d9d9", metalness: 1, roughness: 0.32 }),
+      pkg: new THREE.MeshPhysicalMaterial({ color: "#151515", roughness: 0.62, clearcoat: 0.25, clearcoatRoughness: 0.5 }),
+      ferrite: new THREE.MeshStandardMaterial({ color: "#2d2d2d", roughness: 0.78 }),
+      can: new THREE.MeshStandardMaterial({ color: "#cccccc", metalness: 1, roughness: 0.38 }),
       crystalBase: new THREE.MeshStandardMaterial({ color: "#c5b593", roughness: 0.6 }),
       ledBody: new THREE.MeshStandardMaterial({ color: "#e9e6dd", roughness: 0.5 }),
-      ledLens: new THREE.MeshStandardMaterial({ color: "#0a3940", emissive: "#00e5ff", emissiveIntensity: 0, roughness: 0.2 }),
-      marking: new THREE.MeshBasicMaterial({ color: "#8f959e" }),
+      ledLens: new THREE.MeshStandardMaterial({ color: "#1f1f1f", emissive: "#ffffff", emissiveIntensity: 0, roughness: 0.2 }),
+      marking: new THREE.MeshBasicMaterial({ color: "#949494" }),
     }),
     [noise],
   );
@@ -163,6 +163,7 @@ export function Board() {
     traceMat.uniforms.uActivity.value = heroState.reducedMotion ? 0.35 : 1;
     traceMat.uniforms.uFogNear.value = 12 * heroState.fogScale;
     traceMat.uniforms.uFogFar.value = 30 * heroState.fogScale;
+    if (state.scene.fog) traceMat.uniforms.uFogColor.value.copy(state.scene.fog.color);
     mats.ledLens.emissiveIntensity = intro * 5;
   });
 

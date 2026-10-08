@@ -4,6 +4,7 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { profile } from "@/content/profile";
+import { DEFAULT_PREF, THEME_BG, themeScript } from "@/lib/theme";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const grotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"], display: "swap" });
@@ -25,13 +26,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05080b",
-  colorScheme: "dark",
+  themeColor: THEME_BG.dark,
+  colorScheme: "dark light",
 };
 
+// The server renders the default theme; the inline script swaps in the saved
+// one before the first paint, hence suppressHydrationWarning on <html>.
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}>
+    <html
+      lang="en"
+      data-theme={DEFAULT_PREF === "light" ? "light" : "dark"}
+      data-theme-pref={DEFAULT_PREF}
+      className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <SmoothScroll />
         {children}

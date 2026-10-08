@@ -15,7 +15,7 @@ function DocPreview() {
       {PAGES.map((headings, pi) => (
         <div
           key={pi}
-          className="absolute h-[280px] w-[210px] rounded-md border border-line-strong bg-[#0e141b] p-4 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.9)]"
+          className="absolute h-[280px] w-[210px] rounded-md border border-line-strong bg-panel p-4 shadow-[0_30px_60px_-25px_var(--shadow)]"
           style={{ left: pi * 20, top: pi === 0 ? 20 : 0, zIndex: 2 - pi, transform: `rotate(${pi === 0 ? -2 : 3}deg)` }}
         >
           {pi === 0 && (
@@ -51,7 +51,7 @@ export function Resume() {
         id="resume"
         title={
           <>
-            Download the <span className="text-signal">resume</span>.
+            Download the <span className="text-muted">resume</span>.
           </>
         }
         lead="The full resume as a PDF: education, skills, four industry roles and every project, on two pages."
@@ -76,7 +76,7 @@ export function Resume() {
               <a
                 href={profile.resume.href}
                 download={profile.resume.fileName}
-                className="rounded-full bg-signal px-6 py-3 text-sm font-semibold text-ink shadow-[0_0_34px_-6px_rgba(0,229,255,0.75)] transition hover:brightness-110"
+                className="btn-primary rounded-full px-6 py-3 text-sm font-semibold"
               >
                 Download PDF
               </a>

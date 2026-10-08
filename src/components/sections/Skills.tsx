@@ -6,11 +6,12 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { pinGroups, toolchain, type PinGroup } from "@/content/skills";
 import { cn } from "@/lib/format";
 
+// Theme-aware categorical colours (globals.css), shared with roles and projects.
 const GROUP_COLOR: Record<string, string> = {
-  pd: "#00e5ff",
-  rtl: "#ffd24a",
-  analog: "#e05cff",
-  device: "#36d399",
+  pd: "var(--cat-1)",
+  rtl: "var(--cat-2)",
+  analog: "var(--cat-3)",
+  device: "var(--cat-4)",
 };
 
 // Datasheet convention: pins count down the left side, then up the right side.
@@ -48,7 +49,7 @@ function PinRow({
       <span
         className="h-[7px] w-9 rounded-[1px] transition-shadow duration-300"
         style={{
-          background: "linear-gradient(180deg,#e2e5ea,#9aa1ab)",
+          background: "linear-gradient(180deg,#e5e5e5,#9e9e9e)",
           boxShadow: active === pin.group.id ? `0 0 12px ${c}, 0 0 2px ${c}` : undefined,
         }}
       />
@@ -65,7 +66,7 @@ export function Skills() {
         id="skills"
         title={
           <>
-            Pin configuration: <span className="text-signal">32 skills</span>, four sides.
+            Pin configuration: <span className="text-muted">32 skills</span>, four sides.
           </>
         }
         lead="Grouped like a datasheet pinout. Hover a group on the package to light up its pins."
@@ -81,12 +82,13 @@ export function Skills() {
               ))}
             </ul>
 
-            <div className="relative rounded-md border border-[#2a3140] bg-[linear-gradient(160deg,#17191d,#0e0f12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_30px_60px_-20px_rgba(0,0,0,0.8)]">
-              <span className="absolute left-4 top-4 h-3 w-3 rounded-full bg-[#090a0c] shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
-              <div className="flex h-full flex-col items-center justify-center gap-6 px-6 text-center">
+            {/* the package is a black part in both themes, so its contents stay dark-themed */}
+            <div className="relative rounded-md border border-[#2e2e2e] bg-[linear-gradient(160deg,#181818,#0e0e0e)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_30px_60px_-20px_var(--shadow)]">
+              <span className="absolute left-4 top-4 h-3 w-3 rounded-full bg-[#0a0a0a] shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
+              <div data-theme="dark" className="flex h-full flex-col items-center justify-center gap-6 px-6 text-center">
                 <div>
-                  <p className="font-display text-xl font-semibold tracking-wide text-[#a3a9b2]">VP-SKILLS</p>
-                  <p className="mt-1 font-mono text-[0.66rem] tracking-[0.18em] text-[#6f7680]">32-LQFP · REV A</p>
+                  <p className="font-display text-xl font-semibold tracking-wide text-[#b1b1b1]">VP-SKILLS</p>
+                  <p className="mt-1 font-mono text-[0.66rem] tracking-[0.18em] text-dim">32-LQFP · REV A</p>
                 </div>
                 <ul className="w-full space-y-2">
                   {pinGroups.map((g) => (
@@ -99,12 +101,12 @@ export function Skills() {
                         onBlur={() => setActive(null)}
                         className={cn(
                           "flex w-full items-center gap-2.5 rounded-md border px-3 py-2 text-left text-[0.8rem] transition",
-                          active === g.id ? "border-line-strong bg-white/[0.04] text-fg" : "border-transparent text-[#9aa1ab]",
+                          active === g.id ? "border-line-strong bg-fg/[0.05] text-fg" : "border-transparent text-muted",
                         )}
                       >
                         <span className="h-2 w-2 rounded-full" style={{ background: GROUP_COLOR[g.id], boxShadow: `0 0 8px ${GROUP_COLOR[g.id]}` }} />
                         <span className="flex-1">{g.label}</span>
-                        <span className="font-mono text-[0.62rem] text-[#6f7680]">{g.short}</span>
+                        <span className="font-mono text-[0.62rem] text-dim">{g.short}</span>
                       </button>
                     </li>
                   ))}

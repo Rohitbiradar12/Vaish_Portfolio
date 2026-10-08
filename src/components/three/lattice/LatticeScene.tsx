@@ -2,9 +2,11 @@
 
 import { Environment, Lightformer } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { ShaderWarmup } from "../ShaderWarmup";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import type { Theme } from "@/lib/theme";
+import { useTheme } from "@/lib/useTheme";
+import { ShaderWarmup } from "../ShaderWarmup";
 
 const N = 2; // unit cells per edge
 const BOND = Math.sqrt(3) / 4; // nearest-neighbour distance in units of a
@@ -48,7 +50,14 @@ function buildLattice() {
   return { atoms, bonds: bonds.map(([a, b]) => [remap.get(a)!, remap.get(b)!] as [number, number]) };
 }
 
-function Lattice() {
+// The canvas is transparent over the page, so atoms are silver on dark and
+// graphite on light; the energy wave runs toward white or black respectively.
+const PALETTE: Record<Theme, { atom: string; hot: string; bond: string; glow: number }> = {
+  dark: { atom: "#8c8c8c", hot: "#ffffff", bond: "#3a3a3a", glow: 0.15 },
+  light: { atom: "#9a9a9a", hot: "#141414", bond: "#b4b4b4", glow: 0 },
+};
+
+function Lattice({ theme }: { theme: Theme }) {
   const { atoms, bonds } = useMemo(() => buildLattice(), []);
   const group = useRef<THREE.Group>(null);
   const atomMesh = useRef<THREE.InstancedMesh>(null);
@@ -57,7 +66,7 @@ function Lattice() {
   const mats = useMemo(
     () => ({
       atom: new THREE.MeshPhysicalMaterial({ color: "#ffffff", metalness: 0.35, roughness: 0.22, clearcoat: 0.8 }),
-      bond: new THREE.MeshStandardMaterial({ color: "#1d6f80", emissive: "#00e5ff", emissiveIntensity: 0.35, roughness: 0.4 }),
+      bond: new THREE.MeshStandardMaterial({ color: "#3a3a3a", emissive: "#ffffff", emissiveIntensity: 0.15, roughness: 0.4 }),
     }),
     [],
   );
@@ -73,7 +82,7 @@ function Lattice() {
       o.quaternion.identity();
       o.updateMatrix();
       am.setMatrixAt(i, o.matrix);
-      am.setColorAt(i, new THREE.Color("#9fb3c8"));
+      am.setColorAt(i, new THREE.Color(PALETTE.dark.atom));
     });
     const up = new THREE.Vector3(0, 1, 0);
     bonds.forEach(([a, b], i) => {
@@ -91,9 +100,15 @@ function Lattice() {
     return () => Object.values(mats).forEach((m) => m.dispose());
   }, [atoms, bonds, mats]);
 
-  const base = useMemo(() => new THREE.Color("#8fa3ba"), []);
-  const hot = useMemo(() => new THREE.Color("#00e5ff"), []);
+  const pal = PALETTE[theme];
+  const base = useMemo(() => new THREE.Color(pal.atom), [pal.atom]);
+  const hot = useMemo(() => new THREE.Color(pal.hot), [pal.hot]);
   const c = useMemo(() => new THREE.Color(), []);
+
+  useEffect(() => {
+    mats.bond.color.set(pal.bond);
+    mats.bond.emissiveIntensity = pal.glow;
+  }, [mats, pal]);
 
   useFrame((s, dt) => {
     const t = s.clock.elapsedTime;
@@ -129,6 +144,7 @@ export default function LatticeScene({ active }: { active: boolean }) {
   const [lite] = useState(() => window.matchMedia("(max-width: 768px), (pointer: coarse)").matches);
   const [warm, setWarm] = useState(false);
   const onWarm = useCallback(() => setWarm(true), []);
+  const theme = useTheme();
   return (
     <Canvas
       dpr={[1, lite ? 1.5 : 1.75]}
@@ -139,12 +155,12 @@ export default function LatticeScene({ active }: { active: boolean }) {
     >
       <ambientLight intensity={0.35} />
       <directionalLight position={[3, 5, 4]} intensity={1.4} />
-      <pointLight position={[-4, -1, 3]} intensity={8} color="#00e5ff" distance={12} />
+      <pointLight position={[-4, -1, 3]} intensity={theme === "light" ? 4 : 8} color="#ffffff" distance={12} />
       <Environment resolution={64} frames={1}>
         <Lightformer form="rect" intensity={2} position={[0, 5, 3]} scale={[6, 4, 1]} />
         <Lightformer form="ring" intensity={2} position={[-4, 1, -3]} scale={2} color="#c87533" />
       </Environment>
-      <Lattice />
+      <Lattice theme={theme} />
       <ShaderWarmup onReady={onWarm} />
     </Canvas>
   );

@@ -25,15 +25,15 @@ function Trace({ role, selected }: { role: Role; selected: boolean }) {
   const lo = 31;
   return (
     <svg viewBox="0 0 100 38" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible">
-      <rect x={x0} y={hi} width={x1 - x0} height={lo - hi} fill={c} opacity={selected ? 0.2 : 0.09} />
+      {/* colours go through style: role colours are CSS variables, which SVG attributes don't resolve */}
+      <rect x={x0} y={hi} width={x1 - x0} height={lo - hi} opacity={selected ? 0.2 : 0.09} style={{ fill: c }} />
       <path
         d={`M0 ${lo} H${x0} V${hi} H${x1} V${lo} H100`}
         fill="none"
-        stroke={c}
         strokeWidth={selected ? 2 : 1.4}
         vectorEffect="non-scaling-stroke"
         strokeLinejoin="miter"
-        style={{ filter: selected ? `drop-shadow(0 0 6px ${c})` : undefined }}
+        style={{ stroke: c, filter: selected ? `drop-shadow(0 0 6px ${c})` : undefined }}
       />
     </svg>
   );
@@ -66,7 +66,7 @@ export function Experience() {
         id="experience"
         title={
           <>
-            Career, captured as a <span className="text-signal">waveform</span>.
+            Career, captured as a <span className="text-muted">waveform</span>.
           </>
         }
         lead="Each role is a signal, high while it was active. Hover to scrub the timeline and select a role to see the details. Colours match the blocks on the chip above."
@@ -77,9 +77,9 @@ export function Experience() {
           {/* toolbar */}
           <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-2.5 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-dim md:px-5">
             <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]/80" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]/80" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+              <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+              <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
               <span className="ml-3 normal-case tracking-normal text-muted">career.vcd</span>
             </div>
             <span className="hidden sm:inline">
@@ -179,7 +179,7 @@ export function Experience() {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="panel mt-6 grid gap-8 p-6 md:p-8 lg:grid-cols-[minmax(0,1fr)_320px]"
-          style={{ borderColor: `${color}40` }}
+          style={{ borderColor: `color-mix(in oklab, ${color} 25%, transparent)` }}
         >
           <div>
             <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em]" style={{ color }}>

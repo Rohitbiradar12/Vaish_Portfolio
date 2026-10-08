@@ -117,8 +117,8 @@ export const projects: Project[] = [
 ];
 
 export const levelMeta: Record<ProjectLevel, { label: string; color: string; blurb: string }> = {
-  Layout: { label: "Layout", color: "var(--color-m1)", blurb: "Full-custom digital layout" },
-  Analog: { label: "Analog", color: "var(--color-m2)", blurb: "Analog circuit layout" },
-  Device: { label: "Device", color: "var(--color-diff)", blurb: "Transistor & materials physics" },
-  RTL: { label: "RTL", color: "var(--color-m3)", blurb: "Logic design & verification" },
+  Layout: { label: "Layout", color: "var(--cat-1)", blurb: "Full-custom digital layout" },
+  Analog: { label: "Analog", color: "var(--cat-3)", blurb: "Analog circuit layout" },
+  Device: { label: "Device", color: "var(--cat-4)", blurb: "Transistor & materials physics" },
+  RTL: { label: "RTL", color: "var(--cat-2)", blurb: "Logic design & verification" },
 };

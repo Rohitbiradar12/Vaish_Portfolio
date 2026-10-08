@@ -38,7 +38,7 @@ export function Chip({ dieTextureSize }: { dieTextureSize: number }) {
 
   const mats = useMemo(() => {
     const epoxy = new THREE.MeshPhysicalMaterial({
-      color: "#141518",
+      color: "#151515",
       roughness: 0.6,
       metalness: 0,
       clearcoat: 0.3,
@@ -51,14 +51,14 @@ export function Chip({ dieTextureSize }: { dieTextureSize: number }) {
     return {
       epoxy,
       lid,
-      lead: new THREE.MeshStandardMaterial({ color: "#d9dde3", metalness: 1, roughness: 0.3 }),
-      frame: new THREE.MeshStandardMaterial({ color: "#d4d8df", metalness: 1, roughness: 0.26 }),
+      lead: new THREE.MeshStandardMaterial({ color: "#dcdcdc", metalness: 1, roughness: 0.3 }),
+      frame: new THREE.MeshStandardMaterial({ color: "#d7d7d7", metalness: 1, roughness: 0.26 }),
       gold: new THREE.MeshStandardMaterial({ color: "#f3c766", metalness: 1, roughness: 0.2 }),
-      paddle: new THREE.MeshStandardMaterial({ color: "#b9bec6", metalness: 1, roughness: 0.35 }),
-      dieSide: new THREE.MeshStandardMaterial({ color: "#2b303b", metalness: 0.4, roughness: 0.35 }),
-      marking: new THREE.MeshStandardMaterial({ color: "#a3a9b2", roughness: 0.9, metalness: 0, transparent: true }),
-      dimple: new THREE.MeshStandardMaterial({ color: "#0b0c0e", roughness: 0.22, metalness: 0, transparent: true }),
-      ejector: new THREE.MeshStandardMaterial({ color: "#191a1e", roughness: 0.85, metalness: 0, transparent: true }),
+      paddle: new THREE.MeshStandardMaterial({ color: "#bebebe", metalness: 1, roughness: 0.35 }),
+      dieSide: new THREE.MeshStandardMaterial({ color: "#2c2c2c", metalness: 0.4, roughness: 0.35 }),
+      marking: new THREE.MeshStandardMaterial({ color: "#a9a9a9", roughness: 0.9, metalness: 0, transparent: true }),
+      dimple: new THREE.MeshStandardMaterial({ color: "#0c0c0c", roughness: 0.22, metalness: 0, transparent: true }),
+      ejector: new THREE.MeshStandardMaterial({ color: "#1a1a1a", roughness: 0.85, metalness: 0, transparent: true }),
     };
   }, [noise]);
 
@@ -268,30 +268,19 @@ export function Chip({ dieTextureSize }: { dieTextureSize: number }) {
           />
           {/* laser marking, lying on the top face */}
           <group position={[0, PKG.top + 0.0015, 0]} rotation-x={-Math.PI / 2}>
-            <mesh position={[-1.38, 1.12, 0]} material={mats.marking}>
-              <ringGeometry args={[0.15, 0.19, 6, 1, Math.PI / 6]} />
-            </mesh>
-            <Text ref={setText(0)} font={FONT_MONO} fontSize={0.13} position={[-1.38, 1.115, 0]} anchorX="center" anchorY="middle">
-              VP
-              <primitive object={mats.marking} attach="material" />
-            </Text>
-            <Text ref={setText(1)} font={FONT_MONO} fontSize={0.105} position={[-1.1, 1.12, 0]} anchorX="left" anchorY="middle" letterSpacing={0.08}>
-              VP-SILICON
-              <primitive object={mats.marking} attach="material" />
-            </Text>
-            <Text ref={setText(2)} font={FONT_DISPLAY} fontSize={0.3} position={[-1.6, 0.55, 0]} anchorX="left" anchorY="middle" letterSpacing={0.015}>
+            <Text ref={setText(0)} font={FONT_DISPLAY} fontSize={0.3} position={[-1.6, 0.55, 0]} anchorX="left" anchorY="middle" letterSpacing={0.015}>
               VAISHNAVI PATIL
               <primitive object={mats.marking} attach="material" />
             </Text>
-            <Text ref={setText(3)} font={FONT_MONO} fontSize={0.145} position={[-1.6, 0.15, 0]} anchorX="left" anchorY="middle" letterSpacing={0.04}>
+            <Text ref={setText(1)} font={FONT_MONO} fontSize={0.145} position={[-1.6, 0.15, 0]} anchorX="left" anchorY="middle" letterSpacing={0.04}>
               VLSI · RTL-GDSII · 28NM
               <primitive object={mats.marking} attach="material" />
             </Text>
-            <Text ref={setText(4)} font={FONT_MONO} fontSize={0.115} position={[-1.6, -0.15, 0]} anchorX="left" anchorY="middle" letterSpacing={0.05}>
+            <Text ref={setText(2)} font={FONT_MONO} fontSize={0.115} position={[-1.6, -0.15, 0]} anchorX="left" anchorY="middle" letterSpacing={0.05}>
               MS ECE · MICROSYSTEMS · NEU
               <primitive object={mats.marking} attach="material" />
             </Text>
-            <Text ref={setText(5)} font={FONT_MONO} fontSize={0.115} position={[-1.6, -0.38, 0]} anchorX="left" anchorY="middle" letterSpacing={0.05}>
+            <Text ref={setText(3)} font={FONT_MONO} fontSize={0.115} position={[-1.6, -0.38, 0]} anchorX="left" anchorY="middle" letterSpacing={0.05}>
               2620 · BOSTON MA · REV A
               <primitive object={mats.marking} attach="material" />
             </Text>

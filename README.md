@@ -30,14 +30,38 @@ Lines marked `TODO(client)` are still waiting on information from Vaishnavi.
 
 Every model is generated in code (no downloaded assets):
 
-- `src/components/three/hero/`: the scroll-driven chip. A QFP package with gull-wing leads on a PCB with animated signal traces. The lid opens on scroll to show the die (a canvas-painted floorplan) with gold wire bonds, then the camera probes the four blocks that map to her industry roles.
+- `src/components/three/hero/`: the scroll-driven chip. A QFP package with gull-wing leads on a PCB with animated signal traces. The lid opens on scroll to show the die (a canvas-painted floorplan) with gold wire bonds, then the camera probes the four blocks that map to the four industry roles.
   - `spec.ts`: dimensions, die floorplan, scroll stage timings
   - `CameraRig.tsx`: camera keyframes
   - `diePainter.ts`: the floorplan painter (`dieTexture.ts` runs it in a Web Worker)
-- `src/components/three/device/`: an interactive FDSOI transistor (gate switch, back-gate bias, exploded view).
+- `src/components/three/device/`: an interactive FDSOI transistor (gate switch, back-gate bias, exploded view, drag to rotate). It's drawn as a technical illustration with hairline edges, glassy oxides and a glowing inversion channel.
+  - **Electrons:** GPU-animated points with an additive glow, so there's no post-processing pass.
+  - **Canvas:** transparent over a Tailwind-styled stage.
+  - **Loading:** mounts about 1200 px early and pre-renders off screen, then fades in.
+  - **Instrument UI** (`sections/DeviceLab.tsx`, `sections/TransferCurve.tsx`): a bias console beside the viewer (segmented gate and view controls, a bipolar back-gate fader with presets, reset), a live status strip on the viewer, and a log-scale I<sub>D</sub>–V<sub>G</sub> transfer curve with a crosshair readout and V<sub>T</sub> / I<sub>on</sub> / I<sub>off</sub> / on-off tiles. Every number comes from one illustrative model in `device/model.ts`, so they always agree. The scene is memoised and reads the bias from a ref, so moving the controls never re-renders the canvas.
+- `src/components/three/StudioEnvironment.tsx`: builds the reflection environment before shader warm-up, at 64 px.
+  - drei's `<Environment>` rendered its environment on the first frame, after warm-up, which caused a ~0.4 s recompile stall.
+  - At 128 px the environment blur shaders alone took ~0.4 s to compile on Windows.
 - `src/components/three/lattice/`: a silicon diamond-cubic lattice.
 
 Canvases mount lazily and pause when off-screen. Shaders compile asynchronously before the first frame (`ShaderWarmup.tsx`), and the page never waits for WebGL: the hero text renders immediately and the chip fades in when ready. Phones and touch devices get a lighter render tier (lower pixel ratio, no MSAA, half-resolution bloom, 1024 px die texture). The hero renders a static shell if WebGL is unavailable.
+
+## Theme
+
+Black-and-white design with a **light / dark / system** choice in the navbar. Dark is the default.
+
+The control is a small three.js slide switch: `layout/ThemeSwitch3D.tsx` (Tailwind-styled wrapper, radio buttons, hover label) and `three/toggle/SwitchScene.tsx` (the 3D part).
+
+- It has three detents (sun · monitor · moon) and a chrome knob that springs between them. Gloss black over the hero and in dark mode, white ceramic in light mode.
+- It renders only while moving (`frameloop="demand"`) and loads when the browser is idle. A CSS stand-in shows until then, or permanently without WebGL.
+
+- **Tokens:** colours are CSS variables in `src/app/globals.css` (`--ink`, `--panel`, `--fg`, `--muted`, `--signal` …), defined once for dark and once for light. Tailwind utilities (`bg-ink`, `text-fg/80`) read them, so components need no `dark:` variants.
+- **Switching:** every visit opens in dark mode. `src/lib/theme.ts` keeps the visitor's choice in `sessionStorage`, so it lasts through reloads in that tab but not into a new visit. It also sets `data-theme` / `data-theme-pref` on `<html>`.
+  - An inline script in `layout.tsx` applies the choice before the first paint, so there's no flash. It also clears an older `localStorage` value.
+  - Where the browser supports View Transitions, the new theme grows as a circle from the switch.
+- **Hero:** a dark stage in both themes: a deep charcoal (`--stage` #121214, which `BG` in `hero/spec.ts` renders to after tone mapping). In light mode the navbar is an opaque white bar from the top; in dark mode it's transparent over the hero and frosted once you scroll.
+- **Always-dark parts:** any element can pin its subtree with `data-theme="dark"`. The hero, the Scholar PCB, the Device Lab viewer and the skills package use this.
+- **Category colours** (`--cat-1…4`: roles, skill groups, project types, LEDs) passed the dataviz palette validator, including colour-blind checks, for each theme. In light mode they switch to darker steps. The 3D die uses the dark steps from `BLOCKS` in `hero/spec.ts`.
 
 ## Contact form (EmailJS)
 

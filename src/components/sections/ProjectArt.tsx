@@ -1,22 +1,22 @@
 // Procedural layout illustrations used until real screenshots arrive.
-// Colours follow the metal-layer palette in globals.css.
+// Drawn as a dark EDA layout view in both themes; layers use Virtuoso-style colours.
 
 import { useId } from "react";
 import type { Project } from "@/content/projects";
 
 const C = {
-  bg: "#0a0f15",
+  bg: "#0a0a0a",
   m1: "#4c8dff",
   m2: "#e05cff",
   m3: "#ffd24a",
   poly: "#ff5a5f",
   diff: "#36d399",
   nwell: "#7a5cff",
-  via: "#e6edf3",
-  sig: "#00e5ff",
-  dim: "#5b6676",
-  oxide: "#9fd8ff",
-  sub: "#2a3346",
+  via: "#ededed",
+  sig: "#f2f2f2",
+  dim: "#6b6b6b",
+  oxide: "#d6d6d6",
+  sub: "#2c2c2c",
 };
 
 const Label = ({ x, y, children, anchor = "start", fill = C.dim }: { x: number; y: number; children: string; anchor?: "start" | "middle" | "end"; fill?: string }) => (
@@ -111,7 +111,7 @@ function OpAmp() {
         <g key={`${x}-${y}`}>
           <rect x={x as number} y={y as number} width="42" height="34" fill={t === "A" ? C.m1 : C.m2} fillOpacity="0.18" stroke={t === "A" ? C.m1 : C.m2} />
           {finger((x as number) + 6, y as number, 5, C.poly)}
-          <Label x={(x as number) + 21} y={(y as number) + 22} anchor="middle" fill="#e6edf3">{t as string}</Label>
+          <Label x={(x as number) + 21} y={(y as number) + 22} anchor="middle" fill="#ededed">{t as string}</Label>
         </g>
       ))}
       <Label x={77} y={124} anchor="middle">DIFF PAIR · ABBA</Label>
@@ -140,7 +140,7 @@ function GateOxide({ uid }: { uid: string }) {
       <rect x={x} y="132" width="130" height="50" fill={C.sub} />
       <rect x={x + 16} y={132 - oxideH} width="98" height={oxideH} fill={oxideColor} opacity="0.85" />
       <rect x={x + 16} y={132 - oxideH - 52} width="98" height="52" fill={gate} />
-      <Label x={x + 65} y={132 - oxideH - 22} anchor="middle" fill="#0a0f15">{gateLabel}</Label>
+      <Label x={x + 65} y={132 - oxideH - 22} anchor="middle" fill="#0a0a0a">{gateLabel}</Label>
       <Label x={x + 65} y={198} anchor="middle">{oxLabel}</Label>
       {leak &&
         [36, 62, 88].map((dx) => (
@@ -150,8 +150,8 @@ function GateOxide({ uid }: { uid: string }) {
   );
   return (
     <>
-      {stack(18, 5, "#d9e8f5", C.poly, "POLY", "SiO₂ · k≈3.9 · leaky", true)}
-      {stack(172, 16, "#b98cff", "#aab3bf", "METAL", "HfO₂ · k≈25 · high-k", false)}
+      {stack(18, 5, "#e2e2e2", C.poly, "POLY", "SiO₂ · k≈3.9 · leaky", true)}
+      {stack(172, 16, "#b98cff", "#b3b3b3", "METAL", "HfO₂ · k≈25 · high-k", false)}
       <Label x={83} y={24} anchor="middle" fill={C.dim}>THEN</Label>
       <Label x={237} y={24} anchor="middle" fill={C.sig}>NOW</Label>
       <path d="M152 100 L166 100" stroke={C.dim} strokeWidth="1.5" markerEnd={`url(#${uid}-arrow)`} />
@@ -169,17 +169,17 @@ function Fdsoi() {
       <rect x="34" y="94" width="66" height="26" fill={C.poly} opacity="0.7" />
       <rect x="220" y="94" width="66" height="26" fill={C.poly} opacity="0.7" />
       <rect x="132" y="114" width="56" height="6" fill="#b98cff" />
-      <rect x="132" y="64" width="56" height="50" fill="#aab3bf" />
-      <rect x="120" y="64" width="12" height="56" fill="#9aa4b1" opacity="0.35" />
-      <rect x="188" y="64" width="12" height="56" fill="#9aa4b1" opacity="0.35" />
+      <rect x="132" y="64" width="56" height="50" fill="#b3b3b3" />
+      <rect x="120" y="64" width="12" height="56" fill="#a4a4a4" opacity="0.35" />
+      <rect x="188" y="64" width="12" height="56" fill="#a4a4a4" opacity="0.35" />
       {[67, 160, 253].map((x) => (
         <rect key={x} x={x - 5} y="24" width="10" height={x === 160 ? 40 : 70} fill={C.m3} opacity="0.75" />
       ))}
       <rect x="10" y="16" width="300" height="10" fill={C.m1} opacity="0.7" />
       <path className="anim-dash" d="M100 124 H220" stroke={C.sig} strokeWidth="2.5" fill="none" />
-      <Label x={67} y={88} anchor="middle" fill="#e6edf3">S</Label>
-      <Label x={253} y={88} anchor="middle" fill="#e6edf3">D</Label>
-      <Label x={160} y={93} anchor="middle" fill="#0a0f15">G</Label>
+      <Label x={67} y={88} anchor="middle" fill="#ededed">S</Label>
+      <Label x={253} y={88} anchor="middle" fill="#ededed">D</Label>
+      <Label x={160} y={93} anchor="middle" fill="#0a0a0a">G</Label>
       <Label x={306} y={140} anchor="end">BOX</Label>
       <Label x={306} y={156} anchor="end">BACK GATE · V_BB</Label>
       <Label x={14} y={116}>Si film ~7nm</Label>
@@ -204,9 +204,9 @@ function Ahb({ uid }: { uid: string }) {
       <path d="M96 116 L146 76" stroke={C.dim} strokeWidth="1.5" markerEnd={`url(#${uid}-arrow)`} />
       {st.map((s) => (
         <g key={s.t}>
-          <circle cx={s.x} cy={s.y} r="27" fill="#0d141c" stroke={C.dim} />
+          <circle cx={s.x} cy={s.y} r="27" fill="#111111" stroke={C.dim} />
           <circle className={s.cls} cx={s.x} cy={s.y} r="27" fill={C.m3} fillOpacity="0.12" stroke={C.m3} strokeWidth="2" />
-          <Label x={s.x} y={s.y + 3} anchor="middle" fill="#e6edf3">{s.t}</Label>
+          <Label x={s.x} y={s.y + 3} anchor="middle" fill="#ededed">{s.t}</Label>
         </g>
       ))}
     </>

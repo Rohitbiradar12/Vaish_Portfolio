@@ -1,29 +1,121 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Design tokens: "substrate" dark theme with copper / gold / signal
-   accents and IC-layout metal-layer colors.
+   Theme palette. Dark ("black") is the default and light overrides it;
+   <html data-theme> picks one (src/lib/theme.ts). Any element can pin its
+   subtree with data-theme too: the PCB-style Scholar board and the Device Lab
+   viewport stay dark in both themes, like the physical parts they draw.
 ------------------------------------------------------------------ */
+:root,
+[data-theme="dark"] {
+  --ink: #000000;
+  --substrate: #070707;
+  --panel: #0a0a0a;
+  --panel-2: #121212;
+  --line: #1d1d1d;
+  --line-strong: #2c2c2c;
+
+  --fg: #ededed;
+  --muted: #a3a3a3;
+  --dim: #8b8b8b;
+
+  /* accent: white on dark, black on light */
+  --signal: #ffffff;
+  --copper: #c87533;
+  --gold: #d4af37;
+  --ok: #3ddc97;
+  --warn: #ffb547;
+
+  /* categorical colours (roles, skill groups, project types). Checked with the
+     dataviz palette validator: colour-blind safe on all pairs vs #0a0a0a. */
+  --cat-1: #de3951;
+  --cat-2: #c48300;
+  --cat-3: #906eb5;
+  --cat-4: #0e8c6d;
+
+  --panel-top: rgb(18 18 18 / 0.92);
+  --panel-bottom: rgb(10 10 10 / 0.92);
+  --edge: rgb(255 255 255 / 0.05);
+  --shadow: rgb(0 0 0 / 0.8);
+  --grid-dot: rgb(255 255 255 / 0.075);
+  --hud: rgb(255 255 255 / 0.3);
+  --glow: rgb(255 255 255 / 0.3);
+  --hero-glow: #1d1d20;
+  /* hero stage: a deep charcoal rather than pure black (matches the 3D background) */
+  --stage: #121214;
+  /* hero scrims (strength, stop positions); the hero is always dark-themed */
+  --scrim-1: 95%;
+  --scrim-2: 50%;
+  --scrim-p2: 45%;
+  --scrim-p3: 70%;
+  --scrim-w1: 88%;
+  --scrim-w2: 45%;
+  --scrim-wp2: 38%;
+  --scrim-wp3: 62%;
+  --scrim-b: 70%;
+  --pin: #cfcfcf;
+
+  color-scheme: dark;
+  color: var(--fg);
+}
+
+[data-theme="light"] {
+  --ink: #f5f5f5;
+  --substrate: #efefef;
+  --panel: #ffffff;
+  --panel-2: #fafafa;
+  --line: #e4e4e4;
+  --line-strong: #d2d2d2;
+
+  --fg: #0a0a0a;
+  --muted: #525252;
+  --dim: #686868;
+
+  --signal: #0a0a0a;
+  --copper: #9a5524;
+  --gold: #8a6a12;
+  --ok: #15803d;
+  --warn: #b45309;
+
+  /* same four hues, darker steps; validated vs #ffffff */
+  --cat-1: #9b0d23;
+  --cat-2: #945f0e;
+  --cat-3: #6b3c79;
+  --cat-4: #067f5c;
+
+  --panel-top: rgb(255 255 255 / 0.94);
+  --panel-bottom: rgb(252 252 252 / 0.94);
+  --edge: rgb(0 0 0 / 0.06);
+  --shadow: rgb(0 0 0 / 0.14);
+  --grid-dot: rgb(0 0 0 / 0.07);
+  --hud: rgb(0 0 0 / 0.25);
+  --glow: rgb(0 0 0 / 0.16);
+  --pin: #9e9e9e;
+
+  color-scheme: light;
+  color: var(--fg);
+}
+
+/* Utilities (bg-ink, text-fg/80, …) read the variables above directly, so
+   they follow whichever theme applies at the element. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-substrate: var(--substrate);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-signal: var(--signal);
+  --color-copper: var(--copper);
+  --color-gold: var(--gold);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+}
+
 @theme {
-  --color-ink: #05080b;
-  --color-substrate: #0a0e13;
-  --color-panel: #0c1117;
-  --color-panel-2: #101720;
-  --color-line: #1a232e;
-  --color-line-strong: #263241;
-  --color-mask: #0f2a1f;
-
-  --color-fg: #e6edf3;
-  --color-muted: #8a94a6;
-  --color-dim: #748091;
-
-  --color-copper: #c87533;
-  --color-gold: #d4af37;
-  --color-signal: #00e5ff;
-  --color-signal-dim: #0a8fa3;
-  --color-ok: #3ddc97;
-  --color-warn: #ffb547;
-
   /* metal-layer palette (layout views) */
   --color-m1: #4c8dff;
   --color-m2: #e05cff;
@@ -69,15 +161,14 @@
 }
 
 html {
-  background: var(--color-ink);
-  color-scheme: dark;
+  background: var(--ink);
   /* 16px up to 1920px wide, then grows to 20px so large monitors keep proportions */
   font-size: clamp(16px, calc(7px + 0.46875vw), 20px);
 }
 
 body {
-  background: var(--color-ink);
-  color: var(--color-fg);
+  background: var(--ink);
+  color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,20 +176,27 @@ body {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-signal) 35%, transparent);
-  color: #fff;
+  background: color-mix(in oklab, var(--fg) 22%, transparent);
+  color: var(--fg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-signal);
+  outline: 2px solid var(--signal);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* Thin scrollbar that matches the substrate */
+/* Thin scrollbar that matches the theme */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-line-strong) transparent;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+/* Theme change: the new theme grows as a circle from the switch (theme.ts) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* ------------------------------------------------------------------
@@ -107,18 +205,18 @@ body {
 @layer components {
   /* faint PCB dot-grid used behind sections */
   .bg-pcb-grid {
-    background-image: radial-gradient(circle at 1px 1px, rgb(138 148 166 / 0.13) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0);
     background-size: 24px 24px;
   }
 
   /* hairline panel used for datasheet / console / waveform frames */
   .panel {
-    background: linear-gradient(180deg, rgb(16 23 32 / 0.92), rgb(10 14 19 / 0.92));
-    border: 1px solid var(--color-line);
+    background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+    border: 1px solid var(--line);
     border-radius: 14px;
     box-shadow:
-      0 0 0 1px rgb(255 255 255 / 0.02) inset,
-      0 30px 80px -40px rgb(0 0 0 / 0.8);
+      0 0 0 1px var(--edge) inset,
+      0 30px 80px -40px var(--shadow);
   }
 
   .kicker {
@@ -126,26 +224,26 @@ body {
     font-size: 0.72rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-signal);
+    color: var(--muted);
   }
 
   .chip-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    border: 1px solid var(--color-line-strong);
-    background: rgb(12 17 23 / 0.7);
+    border: 1px solid var(--line-strong);
+    background: color-mix(in oklab, var(--panel) 70%, transparent);
     border-radius: 999px;
     padding: 0.2rem 0.65rem;
     font-family: var(--font-mono);
     font-size: 0.72rem;
-    color: var(--color-muted);
+    color: var(--muted);
     white-space: nowrap;
   }
 
   /* corner brackets (microscope / HUD framing) */
   .hud-corners {
-    --c: rgb(0 229 255 / 0.55);
+    --c: var(--hud);
     background:
       linear-gradient(var(--c), var(--c)) top left / 18px 1px no-repeat,
       linear-gradient(var(--c), var(--c)) top left / 1px 18px no-repeat,
@@ -157,8 +255,53 @@ body {
       linear-gradient(var(--c), var(--c)) bottom right / 1px 18px no-repeat;
   }
 
-  .text-glow {
-    text-shadow: 0 0 24px rgb(0 229 255 / 0.35);
+  /* hero: soft light behind the chip, and scrims that keep the copy readable */
+  .hero-glow {
+    background: radial-gradient(ellipse at 68% 42%, var(--hero-glow), transparent 62%);
+  }
+  .hero-scrim {
+    background: linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--stage) var(--scrim-1), transparent) 0%,
+      color-mix(in oklab, var(--stage) var(--scrim-2), transparent) var(--scrim-p2),
+      transparent var(--scrim-p3)
+    );
+  }
+  /* wide: copy sits on the left; the bottom fade keeps the scroll hint readable */
+  @media (min-aspect-ratio: 11/10) and (min-width: 48rem) {
+    .hero-scrim {
+      background:
+        linear-gradient(0deg, color-mix(in oklab, var(--stage) var(--scrim-b), transparent) 0%, transparent 24%),
+        linear-gradient(
+          90deg,
+          color-mix(in oklab, var(--stage) var(--scrim-w1), transparent) 0%,
+          color-mix(in oklab, var(--stage) var(--scrim-w2), transparent) var(--scrim-wp2),
+          transparent var(--scrim-wp3)
+        );
+    }
+  }
+  .hero-scrim-outro {
+    background: linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--stage) 96%, transparent) 0%,
+      color-mix(in oklab, var(--stage) 75%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  /* primary call to action: white on dark, black on light */
+  .btn-primary {
+    background: var(--signal);
+    color: var(--ink);
+    box-shadow: 0 10px 30px -12px var(--glow);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      opacity 0.2s ease;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 14px 36px -12px var(--glow);
+    opacity: 0.9;
   }
 
   /* numbered datasheet section heading with trailing rule */
@@ -170,16 +313,16 @@ body {
     font-size: 0.74rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-fg);
+    color: var(--fg);
   }
   .ds-heading > span {
     display: inline-grid;
     place-items: center;
     width: 1.5rem;
     height: 1.5rem;
-    border: 1px solid var(--color-line-strong);
+    border: 1px solid var(--line-strong);
     border-radius: 4px;
-    color: var(--color-signal);
+    color: var(--signal);
     font-size: 0.68rem;
     letter-spacing: 0;
   }
@@ -187,7 +330,7 @@ body {
     content: "";
     flex: 1;
     height: 1px;
-    background: var(--color-line);
+    background: var(--line);
   }
 
   /* signal pulses travelling along SVG traces */
@@ -204,9 +347,9 @@ body {
     animation: dash-run 1.1s linear infinite;
   }
 
-  /* ---------- Google Scholar research board ---------- */
+  /* ---------- Google Scholar research board (always a dark PCB) ---------- */
   .sb-silk {
-    fill: #d9ddd2;
+    fill: #dedede;
     fill-opacity: 0.72;
     font-family: var(--font-mono);
     letter-spacing: 0.08em;
@@ -217,7 +360,7 @@ body {
     font-size: max(10px, 1.05cqw);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-signal);
+    color: var(--fg);
   }
   .sb-compact .sb-kicker {
     font-size: 0.7rem;
@@ -227,8 +370,8 @@ body {
     height: 0.5rem;
     flex: none;
     border-radius: 999px;
-    background: var(--color-ok);
-    box-shadow: 0 0 10px var(--color-ok);
+    background: var(--ok);
+    box-shadow: 0 0 10px var(--ok);
     animation: sb-blink 2.4s ease-in-out infinite;
   }
   .sb-pulse {
@@ -239,16 +382,16 @@ body {
     animation: sb-breathe 2.6s ease-in-out infinite;
   }
   .sb-compact {
-    background-color: #06100c;
+    background-color: #080808;
     background-image:
-      radial-gradient(circle at 1px 1px, rgb(159 227 201 / 0.08) 1px, transparent 0),
-      radial-gradient(120% 80% at 30% 0%, rgb(31 90 70 / 0.3), transparent 60%),
-      linear-gradient(160deg, #0b1d16, #050d0a);
+      radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.06) 1px, transparent 0),
+      radial-gradient(120% 80% at 30% 0%, rgb(255 255 255 / 0.05), transparent 60%),
+      linear-gradient(160deg, #131313, #060606);
     background-size:
       16px 16px,
       auto,
       auto;
-    border: 1px solid #1f3b30;
+    border: 1px solid #262626;
     border-radius: 18px;
   }
   .sb-compact-pins {
@@ -260,8 +403,8 @@ body {
       180deg,
       transparent 0,
       transparent 5.8%,
-      #e2e5ea 5.8%,
-      #8f97a2 10.8%,
+      #e5e5e5 5.8%,
+      #949494 10.8%,
       transparent 10.8%,
       transparent 16.66%
     );
@@ -281,8 +424,8 @@ body {
     width: 100%;
     overflow: hidden;
     border-radius: 3cqw;
-    border: 1px solid #2b3039;
-    background: radial-gradient(120% 90% at 20% 10%, #2a2d33 0%, #15171b 45%, #0e0f12 100%);
+    border: 1px solid #2e2e2e;
+    background: radial-gradient(120% 90% at 20% 10%, #2c2c2c 0%, #161616 45%, #0e0e0e 100%);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.08),
       inset 0 -2px 6px rgb(0 0 0 / 0.6),
@@ -303,7 +446,7 @@ body {
     width: 4cqw;
     height: 4cqw;
     border-radius: 999px;
-    background: #0a0b0d;
+    background: #0b0b0b;
     box-shadow:
       inset 0 1px 2px rgb(0 0 0 / 0.9),
       0 1px 0 rgb(255 255 255 / 0.06);
@@ -322,7 +465,7 @@ body {
     font-size: 11cqw;
     line-height: 1;
     letter-spacing: 0.02em;
-    color: #b4bac3;
+    color: #b9b9b9;
     text-shadow: 0 1px 0 rgb(0 0 0 / 0.6);
   }
   .chip-mark-sub {
@@ -331,24 +474,24 @@ body {
     font-size: 3.3cqw;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #8e959f;
+    color: #929292;
   }
   .chip-mark-rule {
     display: block;
     height: 1px;
     width: 100%;
     margin: 4cqw 0 3.2cqw;
-    background: linear-gradient(90deg, #4a515c, transparent);
+    background: linear-gradient(90deg, #4f4f4f, transparent);
   }
   .chip-mark-name {
     font-family: var(--font-mono);
     font-size: 4.6cqw;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #c3c9d2;
+    color: #c9c9c9;
   }
   .chip-mark-verified {
-    color: color-mix(in oklab, var(--color-signal) 70%, #8e959f);
+    color: #d6d6d6;
   }
   .chip-mark-lot {
     position: absolute;
@@ -357,7 +500,7 @@ body {
     font-family: var(--font-mono);
     font-size: 2.8cqw;
     letter-spacing: 0.14em;
-    color: #6f7680;
+    color: #747474;
   }
 
   /* DS1-DS3: 7-segment display modules */
@@ -365,8 +508,8 @@ body {
     position: relative;
     padding: 9%;
     border-radius: 10% / 12%;
-    border: 1px solid #2c343f;
-    background: linear-gradient(180deg, #1d232b, #0f1318);
+    border: 1px solid #303030;
+    background: linear-gradient(180deg, #1e1e1e, #101010);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.08),
       0 14px 30px -14px rgb(0 0 0 / 0.9);
@@ -376,7 +519,7 @@ body {
     width: 5.5%;
     aspect-ratio: 1;
     border-radius: 999px;
-    background: radial-gradient(circle at 35% 35%, #c9ced6, #5d6570 70%);
+    background: radial-gradient(circle at 35% 35%, #d0d0d0, #5f5f5f 70%);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.4);
   }
   .seg-screw::after {
@@ -386,7 +529,7 @@ body {
     right: 18%;
     top: 44%;
     height: 12%;
-    background: #2b3139;
+    background: #2d2d2d;
     transform: rotate(35deg);
   }
   .seg-glass {
@@ -399,7 +542,7 @@ body {
     padding: 8% 10%;
     overflow: hidden;
     border-radius: 6px;
-    background: radial-gradient(120% 120% at 30% 0%, #0b171b, #02070a 70%);
+    background: radial-gradient(120% 120% at 30% 0%, #111111, #030303 70%);
     box-shadow:
       inset 0 2px 8px rgb(0 0 0 / 0.9),
       inset 0 0 0 1px rgb(255 255 255 / 0.04);
@@ -412,7 +555,7 @@ body {
     pointer-events: none;
   }
   .seg-lit {
-    filter: drop-shadow(0 0 2.5px rgb(0 229 255 / 0.9)) drop-shadow(0 0 8px rgb(0 229 255 / 0.45));
+    filter: drop-shadow(0 0 2px rgb(255 255 255 / 0.85)) drop-shadow(0 0 8px rgb(255 255 255 / 0.3));
   }
 
   /* SW1: tactile switch call-to-action */
@@ -424,12 +567,12 @@ body {
     padding: 0 clamp(12px, 3.5cqw, 22px);
     border-radius: 14px;
     border: 1px solid rgb(255 255 255 / 0.1);
-    background: linear-gradient(180deg, #262c34, #12161b);
+    background: linear-gradient(180deg, #272727, #131313);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.14),
       inset 0 -2px 0 rgb(0 0 0 / 0.5),
-      0 0 0 4px #08120e,
-      0 0 0 5px rgb(201 206 214 / 0.28),
+      0 0 0 4px #0b0b0b,
+      0 0 0 5px rgb(210 210 210 / 0.26),
       0 18px 30px -16px rgb(0 0 0 / 0.9);
     transition:
       transform 0.12s ease,
@@ -437,41 +580,41 @@ body {
       border-color 0.2s ease;
   }
   .tactile:hover {
-    border-color: rgb(0 229 255 / 0.45);
+    border-color: rgb(255 255 255 / 0.4);
   }
   .tactile:active {
     transform: translateY(1.5px);
     box-shadow:
       inset 0 2px 6px rgb(0 0 0 / 0.7),
-      0 0 0 4px #08120e,
-      0 0 0 5px rgb(201 206 214 / 0.28);
+      0 0 0 4px #0b0b0b,
+      0 0 0 5px rgb(210 210 210 / 0.26);
   }
   .tactile-dome {
     flex: none;
     width: clamp(24px, 7.5cqw, 38px);
     aspect-ratio: 1;
     border-radius: 999px;
-    background: radial-gradient(circle at 35% 30%, #5b6673, #161b21 68%);
+    background: radial-gradient(circle at 35% 30%, #626262, #181818 68%);
     box-shadow:
-      0 0 0 2px #0b0f13,
-      0 0 0 3.5px rgb(0 229 255 / 0.35),
-      0 0 14px rgb(0 229 255 / 0.25),
+      0 0 0 2px #0d0d0d,
+      0 0 0 3.5px rgb(255 255 255 / 0.3),
+      0 0 14px rgb(255 255 255 / 0.12),
       inset 0 -2px 4px rgb(0 0 0 / 0.6);
     transition: box-shadow 0.25s ease;
   }
   .tactile:hover .tactile-dome,
   .tactile:focus-visible .tactile-dome {
     box-shadow:
-      0 0 0 2px #0b0f13,
-      0 0 0 3.5px rgb(0 229 255 / 0.9),
-      0 0 22px rgb(0 229 255 / 0.7),
+      0 0 0 2px #0d0d0d,
+      0 0 0 3.5px rgb(255 255 255 / 0.85),
+      0 0 22px rgb(255 255 255 / 0.4),
       inset 0 -2px 4px rgb(0 0 0 / 0.6);
   }
   .tactile-label {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(14px, 3.6cqw, 19px);
-    color: var(--color-fg);
+    color: var(--fg);
   }
   .tactile-sub {
     margin-top: 2px;
@@ -479,23 +622,22 @@ body {
     font-size: clamp(9px, 2.1cqw, 11px);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-dim);
+    color: var(--dim);
   }
 
-  /* ---------- featured publication ---------- */
+  /* ---------- publications ---------- */
   .featured-paper {
-    border-color: color-mix(in oklab, var(--color-gold) 32%, var(--color-line));
+    border-color: color-mix(in oklab, var(--gold) 34%, var(--line));
     box-shadow:
       inset 0 0 0 1px rgb(212 175 55 / 0.05),
-      0 40px 90px -40px rgb(0 0 0 / 0.9),
-      0 0 70px -34px rgb(212 175 55 / 0.3);
+      0 40px 90px -40px var(--shadow),
+      0 0 70px -34px rgb(212 175 55 / 0.25);
   }
   .paper-card {
-    border-color: color-mix(in oklab, var(--color-signal) 16%, var(--color-line));
+    border-color: color-mix(in oklab, var(--fg) 12%, var(--line));
     box-shadow:
-      inset 0 0 0 1px rgb(0 229 255 / 0.03),
-      0 40px 90px -40px rgb(0 0 0 / 0.9),
-      0 0 70px -40px rgb(0 229 255 / 0.22);
+      inset 0 0 0 1px var(--edge),
+      0 40px 90px -40px var(--shadow);
   }
   .paper-stack {
     position: relative;
@@ -511,9 +653,11 @@ body {
     position: absolute;
     inset: 0;
     border-radius: 3px;
-    background: #dcddd8;
+    background: #dededa;
     transform: translate(12px, 10px) rotate(4deg);
-    box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.9);
+    box-shadow:
+      0 20px 40px -20px var(--shadow),
+      0 0 0 1px var(--edge);
   }
   .paper-front {
     position: relative;
@@ -522,8 +666,8 @@ body {
     height: 100%;
     border-radius: 3px;
     box-shadow:
-      0 30px 60px -24px rgb(0 0 0 / 0.95),
-      0 0 0 1px rgb(255 255 255 / 0.06);
+      0 30px 60px -24px var(--shadow),
+      0 0 0 1px var(--edge);
   }
 
   /* signal-flow diagram (system described in the paper) */
@@ -539,7 +683,7 @@ body {
     font-family: var(--font-mono);
     font-size: 0.6rem;
     letter-spacing: 0.14em;
-    color: var(--color-dim);
+    color: var(--dim);
   }
   .flow-chip {
     position: relative;
@@ -549,11 +693,11 @@ body {
     height: 100%;
     padding: 0.85rem 0.95rem;
     border-radius: 10px;
-    border: 1px solid #2b3039;
-    background: linear-gradient(160deg, #1a1d22, #0e1013);
+    border: 1px solid var(--line-strong);
+    background: linear-gradient(160deg, var(--panel-2), var(--panel));
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.06),
-      0 12px 24px -16px rgb(0 0 0 / 0.9);
+      inset 0 1px 0 var(--edge),
+      0 12px 24px -16px var(--shadow);
   }
   .flow-chip::before,
   .flow-chip::after {
@@ -562,7 +706,7 @@ body {
     top: 24%;
     bottom: 24%;
     width: 5px;
-    background: repeating-linear-gradient(180deg, #c9ced6 0 3px, transparent 3px 7px);
+    background: repeating-linear-gradient(180deg, var(--pin) 0 3px, transparent 3px 7px);
   }
   .flow-chip::before {
     left: -5px;
@@ -576,7 +720,7 @@ body {
     width: 2px;
     height: 34px;
     margin: 2px 0 2px 30px;
-    background: #7a5532;
+    background: color-mix(in oklab, var(--copper) 75%, var(--ink));
   }
   .flow-link::after {
     content: "";
@@ -585,8 +729,8 @@ body {
     width: 6px;
     height: 14px;
     border-radius: 3px;
-    background: linear-gradient(180deg, transparent, var(--color-signal), transparent);
-    box-shadow: 0 0 10px var(--color-signal);
+    background: linear-gradient(180deg, transparent, var(--signal), transparent);
+    box-shadow: 0 0 10px var(--glow);
     animation: flow-y 1.6s linear infinite;
   }
   .flow-link-label {
@@ -597,7 +741,7 @@ body {
     font-family: var(--font-mono);
     font-size: 0.58rem;
     letter-spacing: 0.14em;
-    color: var(--color-copper);
+    color: var(--copper);
   }
   @media (min-width: 1024px) {
     .flow-node {
@@ -615,7 +759,7 @@ body {
       left: 0;
       width: 14px;
       height: 6px;
-      background: linear-gradient(90deg, transparent, var(--color-signal), transparent);
+      background: linear-gradient(90deg, transparent, var(--signal), transparent);
       animation-name: flow-x;
     }
     .flow-link-label {

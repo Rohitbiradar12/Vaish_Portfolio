@@ -72,10 +72,10 @@ export function Contact({ emailjs }: { emailjs: EmailJSConfig | null }) {
         id="contact"
         title={
           <>
-            Get in <span className="text-signal">touch</span>.
+            Get in <span className="text-muted">touch</span>.
           </>
         }
-        lead="Hiring for physical design, RTL design or verification? Send a message or reach out directly."
+        lead="Hiring for physical design, RTL design or verification? Send me a message or reach out directly."
       />
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -84,7 +84,7 @@ export function Contact({ emailjs }: { emailjs: EmailJSConfig | null }) {
             <div className="flex items-center justify-between border-b border-line px-5 py-2.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-dim">
               <span>uart0 · 115200 8N1</span>
               <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-ok shadow-[0_0_8px_var(--color-ok)]" /> connected
+                <span className="h-1.5 w-1.5 rounded-full bg-ok shadow-[0_0_8px_var(--ok)]" /> connected
               </span>
             </div>
             <div className="space-y-4 p-5 font-mono text-[0.82rem] leading-relaxed md:p-6">
@@ -109,7 +109,7 @@ export function Contact({ emailjs }: { emailjs: EmailJSConfig | null }) {
                   <button
                     type="submit"
                     disabled={status === "sending"}
-                    className="rounded-md bg-signal px-5 py-2 font-semibold text-ink shadow-[0_0_26px_-6px_rgba(0,229,255,0.7)] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
+                    className="btn-primary rounded-md px-5 py-2 font-semibold disabled:cursor-wait disabled:opacity-70"
                   >
                     {status === "sending" ? "SENDING…" : "SEND ↵"}
                   </button>
@@ -117,7 +117,7 @@ export function Contact({ emailjs }: { emailjs: EmailJSConfig | null }) {
                 <p role="status" className="sm:pl-[100px]">
                   {status === "sent" && (
                     <span className="text-ok">
-                      ✓ Message sent. {profile.firstName} will reply to {sentTo}.
+                      ✓ Message sent. I&apos;ll reply to {sentTo}.
                     </span>
                   )}
                   {status === "opened" && <span className="text-muted">Opening your email app… Nothing opened? Copy the address from the Email card.</span>}

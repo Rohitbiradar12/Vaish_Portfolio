@@ -10,12 +10,9 @@ export function Footer() {
         <p>
           © {YEAR} {profile.name} · {profile.location}
         </p>
-        <div className="flex items-center gap-6">
-          <span>Next.js · three.js</span>
-          <a href="#top" className="text-muted hover:text-fg">
-            Back to top ↑
-          </a>
-        </div>
+        <a href="#top" className="self-start text-muted hover:text-fg md:self-auto">
+          Back to top ↑
+        </a>
       </div>
     </footer>
   );
