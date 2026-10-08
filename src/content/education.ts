@@ -16,7 +16,7 @@ export const degrees: Degree[] = [
     field: "Electrical & Computer Engineering · Microsystems, Materials & Devices",
     school: "Northeastern University",
     location: "Boston, MA",
-    score: "CGPA 3.9",
+    score: "GPA 3.9",
     date: "May 2026",
     coursework: [
       "Analog Integrated Circuits & Design",
@@ -35,7 +35,7 @@ export const degrees: Degree[] = [
     field: "Electronics & Communication Engineering",
     school: "Dayananda Sagar College of Engineering",
     location: "Bengaluru, India",
-    score: "8.0 / 10",
+    score: "CGPA 8.0",
     date: "Jul 2024",
     coursework: ["VLSI", "SystemVerilog", "ASIC Design", "Analog Electronics", "Digital Electronics", "FPGA", "Microcontrollers"],
   },
