@@ -125,7 +125,7 @@ export function Projects() {
         id="projects"
         title={
           <>
-            Taped out in the lab: <span className="text-muted">layouts to devices</span>.
+            Projects: <span className="text-muted">layouts to devices</span>.
           </>
         }
         lead="Academic projects from 180nm full-custom layout down to 22nm FDSOI device behaviour."
